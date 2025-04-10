@@ -37,7 +37,7 @@ from utils.config_manager import ConfigManager
 
 # LangGraph imports
 import langgraph.graph as lg
-from langgraph.checkpoint import MemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 
 
 class MarketDataAgent(BaseAgent):

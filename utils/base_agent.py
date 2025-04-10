@@ -25,7 +25,7 @@ except ImportError:
 from langchain.schema import HumanMessage, AIMessage, SystemMessage
 from langchain.schema.runnable import Runnable
 import langgraph.graph as lg
-from langgraph.checkpoint import MemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 
 # Environment variables
 from dotenv import load_dotenv

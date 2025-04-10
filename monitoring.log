@@ -1,0 +1,14 @@
+2025-04-11 01:25:19,615 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-11 01:25:20,049 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 01:25:20,050 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-11 01:25:20,050 - ForexMonitoring - INFO - Successfully connected to OANDA account via WalletManager
+2025-04-11 01:25:20,050 - ForexMonitoring - INFO - initialization: WalletManager connected successfully
+2025-04-11 01:25:20,050 - ForexMonitoring - ERROR - Error initializing WalletManager: 'MonitoringDashboard' object has no attribute 'system_data'
+2025-04-11 01:25:20,050 - ForexMonitoring - ERROR - initialization: WalletManager initialization error: 'MonitoringDashboard' object has no attribute 'system_data'
+2025-04-11 01:25:27,655 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-11 01:25:28,036 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 01:25:28,038 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-11 01:25:28,038 - ForexMonitoring - INFO - Successfully connected to OANDA account via WalletManager
+2025-04-11 01:25:28,038 - ForexMonitoring - INFO - initialization: WalletManager connected successfully
+2025-04-11 01:25:28,038 - ForexMonitoring - ERROR - Error initializing WalletManager: 'MonitoringDashboard' object has no attribute 'system_data'
+2025-04-11 01:25:28,038 - ForexMonitoring - ERROR - initialization: WalletManager initialization error: 'MonitoringDashboard' object has no attribute 'system_data'

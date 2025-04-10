@@ -46,37 +46,58 @@ technical_analysis:
   # Trading strategies configuration with optimized parameters
   strategies:
     active_strategies:
-      - moving_average_crossover
-      - rsi_reversal
+      - rsi_reversal         # Prioritize the most profitable strategy
       - bollinger_bands
       - macd
-    moving_average_crossover:
-      fast_period: 10
-      slow_period: 50
-      timeframes: ["1h", "4h"]
-      symbols: ["EUR/USD", "GBP/USD"]
+      - moving_average_crossover
+    # Strategy-specific risk parameters
+    risk_per_strategy:
+      rsi_reversal: 0.025    # 2.5% risk for best performer
+      bollinger_bands: 0.015 # 1.5% risk
+      macd: 0.01             # 1% risk (reduced)
+      moving_average_crossover: 0.0075 # 0.75% risk until proven
+    # Enhanced RSI Reversal Strategy - performed best in testing
     rsi_reversal:
       rsi_period: 14
-      oversold: 30
-      overbought: 70
+      oversold: 25           # Tightened from 30 for stronger signals
+      overbought: 75         # Tightened from 70 for stronger signals
+      confirmation_ma_period: 20 # New: MA confirmation
       timeframes: ["1h", "4h"]
       symbols: ["EUR/USD", "GBP/USD", "USD/JPY"]
+    # Enhanced Bollinger Bands Strategy
     bollinger_bands:
       period: 20
-      std_dev: 2.0
+      std_dev: 2.5           # Widened from 2.0 to reduce false signals
+      rsi_filter_period: 14  # New: RSI filter
+      rsi_lower_threshold: 40 # New: Only buy when RSI < 40
+      rsi_upper_threshold: 60 # New: Only sell when RSI > 60
       timeframes: ["1h", "4h"]
       symbols: ["EUR/USD", "USD/JPY"]
+    # Enhanced MACD Strategy
     macd:
       fast_period: 12
       slow_period: 26
       signal_period: 9
+      histogram_threshold: 0.0005 # New: Minimum histogram value
+      trend_ma_period: 50         # New: Trend filter
       timeframes: ["1h", "4h", "1d"]
       symbols: ["EUR/USD", "GBP/USD", "AUD/USD"]
-    breakout:
-      period: 20
-      threshold: 0.01
-      timeframes: ["4h", "1d"]
+    # Enhanced Moving Average Crossover
+    moving_average_crossover:
+      fast_period: 5          # Changed from 10 for more sensitivity
+      slow_period: 20         # Changed from 50 for more sensitivity
+      volume_threshold: 1.5   # New: Only trade when volume > 1.5x average
+      volume_period: 20       # New: Period for volume average
+      timeframes: ["1h", "4h"]
       symbols: ["EUR/USD", "GBP/USD"]
+    # Common risk management parameters
+    risk_management:
+      max_positions: 3         # Maximum concurrent positions
+      reward_risk_ratio: 2     # Target 2:1 reward-to-risk
+      trailing_stop_atr: 2.5   # Trailing stop at 2.5 ATR
+      atr_period: 14           # Period for ATR calculation
+      max_trade_duration: 48   # Close trades after 48 hours
+      correlation_threshold: 0.7 # Avoid highly correlated trades
 
 fundamentals:
   data_sources:

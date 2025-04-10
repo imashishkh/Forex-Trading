@@ -35,7 +35,7 @@ from market_data_agent import MarketDataAgent
 
 # LangGraph imports
 import langgraph.graph as lg
-from langgraph.checkpoint import MemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 
 
 class TechnicalAnalystAgent(BaseAgent):

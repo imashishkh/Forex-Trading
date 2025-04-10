@@ -43,7 +43,7 @@ from utils.base_agent import BaseAgent, AgentState, AgentMessage
 
 # LangGraph imports
 import langgraph.graph as lg
-from langgraph.checkpoint import MemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 
 
 class SentimentAgent(BaseAgent):

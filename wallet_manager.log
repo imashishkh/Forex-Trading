@@ -1,0 +1,376 @@
+2025-04-10 22:30:32,795 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-10 22:30:33,744 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:30:33,745 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-10 22:30:34,311 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:30:34,867 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:30:35,196 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:30:35,531 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:30:36,944 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:30:36,947 - WalletManager - INFO - Exported account data to ./account_data_export_2025-04-10_22-30-34.json
+2025-04-10 22:30:38,166 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:30:38,492 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:30:38,493 - WalletManager - INFO - Margin used: 11.1908
+2025-04-10 22:30:38,790 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:30:38,791 - WalletManager - INFO - Available margin: 1089995.6797
+2025-04-10 22:30:39,091 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:30:39,092 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:30:39,393 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:30:39,394 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:30:39,394 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:30:39,732 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:30:39,732 - WalletManager - INFO - Realized P/L for 7d: 0.0
+2025-04-10 22:30:40,089 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:30:40,091 - WalletManager - INFO - Realized P/L for 30d: 0.0
+2025-04-10 22:30:40,431 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:30:40,733 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:31:05,489 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-10 22:31:05,799 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:31:05,800 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-10 22:31:06,118 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:31:06,419 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:31:06,725 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:31:07,034 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:31:08,053 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:31:08,054 - WalletManager - INFO - Exported account data to ./account_data_export_2025-04-10_22-31-06.json
+2025-04-10 22:31:08,399 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:31:08,708 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:31:08,709 - WalletManager - INFO - Margin used: 11.1892
+2025-04-10 22:31:09,015 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:31:09,017 - WalletManager - INFO - Available margin: 1089995.5817
+2025-04-10 22:31:09,312 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:31:09,314 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:31:09,621 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:31:09,623 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:31:09,623 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:31:09,966 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:31:09,967 - WalletManager - INFO - Realized P/L for 7d: 0.0
+2025-04-10 22:31:11,189 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:31:11,190 - WalletManager - INFO - Realized P/L for 30d: 0.0
+2025-04-10 22:31:11,533 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:31:11,841 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:36,740 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-10 22:32:37,048 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:37,050 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-10 22:32:37,358 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:37,660 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:37,988 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:38,304 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:39,283 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:39,286 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:32:39,774 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:40,082 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:40,085 - WalletManager - INFO - Margin used: 11.1822
+2025-04-10 22:32:40,473 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:40,474 - WalletManager - INFO - Available margin: 1089995.2877
+2025-04-10 22:32:40,838 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:40,840 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:32:41,997 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:41,999 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:32:41,999 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:32:42,339 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:42,660 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:42,971 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:32:43,280 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:43,646 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:43,961 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:44,282 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:45,255 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:45,257 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:32:45,737 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:46,049 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:46,050 - WalletManager - INFO - Margin used: 11.1848
+2025-04-10 22:32:46,411 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:46,412 - WalletManager - INFO - Available margin: 1089995.3955
+2025-04-10 22:32:46,706 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:46,708 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:32:47,012 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:47,013 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:32:47,013 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:32:47,376 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:47,743 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:48,059 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:32:53,380 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:53,678 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:54,092 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:54,503 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:55,531 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:55,532 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:32:56,004 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:56,311 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:56,312 - WalletManager - INFO - Margin used: 11.1846
+2025-04-10 22:32:56,628 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:56,629 - WalletManager - INFO - Available margin: 1089995.3955
+2025-04-10 22:32:56,931 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:56,931 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:32:57,242 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:32:57,243 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:32:57,243 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:32:58,422 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:32:58,738 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:32:59,052 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:33:04,367 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:04,680 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:05,004 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:05,319 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:06,306 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:06,308 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:33:06,789 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:07,100 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:07,101 - WalletManager - INFO - Margin used: 11.1862
+2025-04-10 22:33:07,410 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:07,411 - WalletManager - INFO - Available margin: 1089995.4249
+2025-04-10 22:33:07,813 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:07,814 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:33:08,120 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:08,121 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:33:08,121 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:33:08,465 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:08,838 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:09,287 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:33:14,601 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:14,935 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:15,259 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:15,813 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:16,798 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:16,800 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:33:17,280 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:17,606 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:17,607 - WalletManager - INFO - Margin used: 11.1873
+2025-04-10 22:33:17,917 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:17,918 - WalletManager - INFO - Available margin: 1089995.5082
+2025-04-10 22:33:19,223 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:19,225 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:33:19,527 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:19,529 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:33:19,529 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:33:19,891 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:20,204 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:20,510 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:33:25,816 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:26,126 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:26,430 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:26,739 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:27,708 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:27,710 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:33:28,392 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:28,744 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:28,745 - WalletManager - INFO - Margin used: 11.1867
+2025-04-10 22:33:29,051 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:29,052 - WalletManager - INFO - Available margin: 1089995.4837
+2025-04-10 22:33:29,353 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:29,356 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:33:29,663 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:29,663 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:33:29,663 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:33:30,121 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:30,438 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:30,758 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:33:36,076 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:36,469 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:36,775 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:37,111 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:38,191 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:38,193 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:33:38,661 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:38,967 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:38,968 - WalletManager - INFO - Margin used: 11.1839
+2025-04-10 22:33:39,298 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:39,299 - WalletManager - INFO - Available margin: 1089995.3416
+2025-04-10 22:33:39,607 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:39,609 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:33:39,915 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:39,916 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:33:39,916 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:33:40,378 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:40,701 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:41,039 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:33:46,354 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:46,660 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:46,978 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:47,301 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:48,245 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:48,246 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:33:48,719 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:49,020 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:49,022 - WalletManager - INFO - Margin used: 11.1833
+2025-04-10 22:33:49,321 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:49,322 - WalletManager - INFO - Available margin: 1089995.3171
+2025-04-10 22:33:49,627 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:49,628 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:33:49,952 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:49,953 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:33:49,953 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:33:50,295 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:50,599 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:50,916 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:33:56,249 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:56,580 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:56,967 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:33:57,274 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:58,502 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:58,504 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:33:58,973 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:33:59,292 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:59,293 - WalletManager - INFO - Margin used: 11.1852
+2025-04-10 22:33:59,587 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:59,587 - WalletManager - INFO - Available margin: 1089995.4053
+2025-04-10 22:33:59,892 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:33:59,893 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:34:00,202 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:00,203 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:34:00,203 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:34:00,548 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:00,860 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:01,209 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:34:06,539 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:06,900 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:07,203 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:07,513 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:08,670 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:08,671 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:34:09,253 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:09,583 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:09,584 - WalletManager - INFO - Margin used: 11.1848
+2025-04-10 22:34:09,891 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:09,892 - WalletManager - INFO - Available margin: 1089995.3759
+2025-04-10 22:34:10,303 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:10,304 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:34:10,611 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:10,612 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:34:10,612 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:34:10,951 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:11,304 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:11,713 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:34:17,038 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:17,346 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:17,645 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:18,062 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:19,084 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:19,086 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:34:19,699 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:20,110 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:20,112 - WalletManager - INFO - Margin used: 11.1856
+2025-04-10 22:34:20,422 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:20,423 - WalletManager - INFO - Available margin: 1089995.42
+2025-04-10 22:34:20,729 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:20,731 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:34:21,131 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:21,131 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:34:21,131 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:34:21,510 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:21,876 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:22,244 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:34:27,655 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:28,011 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:28,463 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:28,893 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:29,942 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:29,943 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:34:30,465 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:30,799 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:30,800 - WalletManager - INFO - Margin used: 11.1848
+2025-04-10 22:34:31,119 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:31,120 - WalletManager - INFO - Available margin: 1089995.3857
+2025-04-10 22:34:31,431 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:31,432 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:34:31,847 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:31,847 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:34:31,847 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:34:32,229 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:32,537 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:32,897 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:34:38,201 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:38,540 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:38,858 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:39,189 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:40,235 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:40,237 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:34:40,760 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:41,306 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:41,307 - WalletManager - INFO - Margin used: 11.1838
+2025-04-10 22:34:41,615 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:41,616 - WalletManager - INFO - Available margin: 1089995.3367
+2025-04-10 22:34:41,929 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:41,931 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:34:42,332 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:42,334 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:34:42,334 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:34:42,856 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:43,379 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:43,726 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:34:49,192 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:49,497 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:49,807 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:50,215 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:51,244 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:51,246 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:34:51,770 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:52,162 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:52,163 - WalletManager - INFO - Margin used: 11.1827
+2025-04-10 22:34:52,468 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:52,469 - WalletManager - INFO - Available margin: 1089995.2779
+2025-04-10 22:34:52,819 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:52,821 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:34:53,142 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:34:53,143 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:34:53,143 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:34:53,495 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:34:53,869 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:54,179 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:34:59,493 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:34:59,803 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:00,112 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:00,457 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:01,581 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:01,583 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:35:02,046 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:02,362 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:02,363 - WalletManager - INFO - Margin used: 11.1838
+2025-04-10 22:35:02,709 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:02,710 - WalletManager - INFO - Available margin: 1089995.3073
+2025-04-10 22:35:03,122 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:03,124 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:35:03,528 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:03,530 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:35:03,530 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:35:03,872 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:04,244 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:04,655 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:35:09,967 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:10,389 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:10,799 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:11,107 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:12,382 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:12,383 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:35:12,856 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:13,163 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:13,164 - WalletManager - INFO - Margin used: 11.1842
+2025-04-10 22:35:13,468 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:13,468 - WalletManager - INFO - Available margin: 1089995.3465
+2025-04-10 22:35:13,777 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:13,778 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:35:14,178 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:14,179 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:35:14,179 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:35:14,523 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:14,828 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:15,143 - WalletManager - INFO - Successfully retrieved 68 account instruments
+2025-04-10 22:35:20,470 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:20,785 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:21,093 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:21,408 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:22,400 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:22,402 - WalletManager - INFO - Exported account data to ./tmp_export
+2025-04-10 22:35:22,883 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:23,210 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:23,211 - WalletManager - INFO - Margin used: 11.1831
+2025-04-10 22:35:23,511 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:23,512 - WalletManager - INFO - Available margin: 1089995.3024
+2025-04-10 22:35:23,816 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:23,816 - WalletManager - INFO - Margin closeout percentage: 0.00%
+2025-04-10 22:35:24,125 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-10 22:35:24,127 - WalletManager - INFO - Current account balance: 1089999.9555
+2025-04-10 22:35:24,127 - WalletManager - INFO - Margin health check: HEALTHY, Margin levels are healthy.
+2025-04-10 22:35:24,469 - WalletManager - INFO - Retrieved 0 transactions
+2025-04-10 22:35:24,761 - WalletManager - INFO - Successfully retrieved account details
+2025-04-10 22:35:25,063 - WalletManager - INFO - Successfully retrieved 68 account instruments

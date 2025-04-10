@@ -46,7 +46,7 @@ from utils.metrics import calculate_drawdown, calculate_sharpe_ratio
 
 # LangGraph imports
 import langgraph.graph as lg
-from langgraph.checkpoint import MemorySaver
+from langgraph.checkpoint.memory import MemorySaver
 
 
 class PortfolioManagerAgent(BaseAgent):

@@ -1,0 +1,20 @@
+[browser]
+gatherUsageStats = false
+
+[server]
+enableCORS = false
+enableXsrfProtection = false
+
+[theme]
+primaryColor = "#0068C9"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#F0F2F6"
+textColor = "#262730"
+font = "sans serif"
+
+# This is the important part to fix the CSP issue
+[browser.serverOptions]
+wsSendMsg = true
+
+# Allow unsafe-eval in the CSP
+csp = { directives = { "script-src" = ["'self'", "'unsafe-inline'", "'unsafe-eval'"] } } 

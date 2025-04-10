@@ -1,0 +1,37 @@
+{
+    "agents": ["market_data_agent", "wallet_manager", "technical_analysis", "portfolio_manager", "risk_manager"],
+    "api_connections": {
+        "oanda": {
+            "url": "https://api-fxpractice.oanda.com",
+            "timeout": 10
+        },
+        "news_api": {
+            "url": "https://newsapi.org",
+            "timeout": 10
+        }
+    },
+    "alerts": {
+        "email": {
+            "enabled": false,
+            "smtp_server": "smtp.gmail.com",
+            "smtp_port": 587,
+            "username": "",
+            "password": "",
+            "recipients": []
+        },
+        "sms": {
+            "enabled": false,
+            "provider": "",
+            "api_key": "",
+            "phone_numbers": []
+        }
+    },
+    "update_interval": 5,
+    "anomaly_detection": {
+        "cpu_threshold": 80,
+        "memory_threshold": 80,
+        "disk_threshold": 80,
+        "response_time_threshold": 2
+    },
+    "instruments": ["EUR_USD", "GBP_USD", "USD_JPY", "AUD_USD", "USD_CAD", "EUR_GBP"]
+} 
