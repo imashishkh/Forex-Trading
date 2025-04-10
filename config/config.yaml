@@ -1,0 +1,116 @@
+# Forex Trading AI Platform Configuration
+
+platform:
+  name: Forex Trading AI Platform
+  version: 0.1.0
+  cycle_interval: 60  # seconds
+  log_level: INFO
+
+market_data:
+  api_provider: example_provider
+  api_key: your_api_key_here
+  symbols:
+    - EUR/USD
+    - GBP/USD
+    - USD/JPY
+    - AUD/USD
+  timeframes:
+    - 1m
+    - 5m
+    - 15m
+    - 1h
+    - 4h
+    - 1d
+  data_dir: ../data/market_data
+
+technical_analysis:
+  indicators:
+    moving_averages:
+      - SMA
+      - EMA
+      - WMA
+    oscillators:
+      - RSI
+      - MACD
+      - Stochastic
+    volatility:
+      - Bollinger Bands
+      - ATR
+    trend:
+      - ADX
+      - Ichimoku
+  lookback_periods:
+    short_term: 14
+    medium_term: 50
+    long_term: 200
+  # Trading strategies configuration with optimized parameters
+  strategies:
+    active_strategies:
+      - moving_average_crossover
+      - rsi_reversal
+      - bollinger_bands
+      - macd
+    moving_average_crossover:
+      fast_period: 10
+      slow_period: 50
+      timeframes: ["1h", "4h"]
+      symbols: ["EUR/USD", "GBP/USD"]
+    rsi_reversal:
+      rsi_period: 14
+      oversold: 30
+      overbought: 70
+      timeframes: ["1h", "4h"]
+      symbols: ["EUR/USD", "GBP/USD", "USD/JPY"]
+    bollinger_bands:
+      period: 20
+      std_dev: 2.0
+      timeframes: ["1h", "4h"]
+      symbols: ["EUR/USD", "USD/JPY"]
+    macd:
+      fast_period: 12
+      slow_period: 26
+      signal_period: 9
+      timeframes: ["1h", "4h", "1d"]
+      symbols: ["EUR/USD", "GBP/USD", "AUD/USD"]
+    breakout:
+      period: 20
+      threshold: 0.01
+      timeframes: ["4h", "1d"]
+      symbols: ["EUR/USD", "GBP/USD"]
+
+fundamentals:
+  data_sources:
+    - economic_calendar
+    - central_bank_announcements
+    - economic_indicators
+  api_keys:
+    news_api: your_news_api_key_here
+    economic_data: your_economic_data_api_key_here
+
+sentiment:
+  data_sources:
+    - twitter
+    - news
+    - reddit
+  api_keys:
+    twitter: your_twitter_api_key_here
+    news: your_news_api_key_here
+  models:
+    nlp_model: distilbert-base-uncased
+    sentiment_threshold: 0.5
+
+risk_management:
+  max_risk_per_trade: 0.02  # 2% of account
+  max_open_positions: 5
+  max_risk_per_currency: 0.05  # 5% of account
+  max_daily_drawdown: 0.05  # 5% of account
+  stop_loss_atr_multiplier: 2.0
+
+portfolio_management:
+  account_size: 10000
+  leverage: 30
+  position_sizing_method: risk_based  # Alternatives: fixed_lot, percent_based
+  broker:
+    name: example_broker
+    api_key: your_broker_api_key_here
+    api_secret: your_broker_api_secret_here 

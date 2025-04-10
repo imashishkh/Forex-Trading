@@ -1,0 +1,9 @@
+[
+  {
+    "timestamp": "2025-04-09T18:53:24.591111",
+    "agent": "test_risk_manager",
+    "event": "risk_report_generated",
+    "risk_level": "moderate",
+    "warnings_count": 1
+  }
+]
