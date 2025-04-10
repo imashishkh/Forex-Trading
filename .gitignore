@@ -1,0 +1,61 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# Virtual environments
+venv/
+env/
+ENV/
+
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
+monitoring.log
+wallet_manager.log
+enhanced_wallet_manager_demo.log
+forex_trading.log
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Cache files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Account data and exports
+account_data_export_*.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# MacOS
+.DS_Store
+
+# Trading data
+data/*
+!data/.gitkeep
+
+# Plot outputs
+plots/*
+!plots/.gitkeep
+
+# Reports
+reports/*
+!reports/.gitkeep
+
+# API keys and sensitive information
+config/*_keys.json
+config/*_secrets.json 
