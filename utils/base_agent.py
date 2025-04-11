@@ -11,7 +11,7 @@ functionality that all agents should implement.
 import logging
 import os
 import abc
-from typing import Any, Dict, List, Optional, Union, Set, TypeVar, cast
+from typing import Any, Dict, List, Optional, Union, Set, TypeVar, cast, TypedDict
 from datetime import datetime
 import uuid
 import traceback
@@ -35,7 +35,30 @@ load_dotenv()
 
 # Type definitions
 T = TypeVar('T')
-AgentState = Dict[str, Any]
+
+# --- MODIFIED: Define AgentState as a proper class --- 
+# AgentState = Dict[str, Any] # Old definition commented out
+
+class AgentState(TypedDict):
+    """State class for LangGraph workflow. Using TypedDict for compatibility.
+    
+    Attributes:
+        messages: List of messages exchanged in the workflow.
+        current_agent: The name of the agent currently acting.
+        context: Shared context dictionary for agents.
+        history: History of agent actions or states.
+        status: Current status of the workflow (e.g., idle, running, completed, error).
+        error: Optional error message if the workflow encountered an error.
+    """
+    messages: List[Dict[str, Any]]
+    current_agent: str
+    context: Dict[str, Any]
+    history: List[Dict[str, Any]]
+    status: str
+    error: Optional[str]
+
+# --- END MODIFICATION ---
+
 AgentMessage = Dict[str, Any]
 
 class BaseAgent(abc.ABC):
