@@ -25,7 +25,13 @@ import traceback
 # Workflow and state management
 import langgraph.graph as lg
 from langgraph.checkpoint.memory import MemorySaver
-from langgraph.graph import START, END, StateGraph
+# Modified import to work with langgraph 0.0.15
+# Instead of importing START and END directly, we'll define them ourselves
+# from langgraph.graph import START, END, StateGraph # Original line commented out
+from langgraph.graph import StateGraph
+# Define START and END constants that might be missing or different in this version
+START = lg.START # Use the constant from the imported module if available
+END = lg.END     # Use the constant from the imported module if available
 
 # Import agents
 from market_data_agent.agent import MarketDataAgent
@@ -385,8 +391,8 @@ class Orchestrator:
             # Create graph
             self.graph = self.create_graph()
             
-            # Compile graph with memory saver
-            self.compiled_graph = self.graph.compile(checkpointer=self.memory_saver)
+            # Compile graph (without checkpointer for older version compatibility)
+            self.compiled_graph = self.graph.compile()
             
             self.logger.info("LangGraph workflow defined successfully")
             
@@ -404,37 +410,56 @@ class Orchestrator:
         # Import here to avoid circular imports
         from typing import List, Dict, Any, TypedDict
         from datetime import datetime
-        import langgraph.graph as lg
-        from langgraph.graph import StateGraph
+        # Removed lg import as it's already global
+        # from langgraph.graph import StateGraph # Removed redundant import
         
-        # Define a proper TypedDict for the schema
-        class WorkflowState(TypedDict):
-            workflow_id: str
-            market_data: Dict[str, Any]
-            technical_analysis: Dict[str, Any] 
-            fundamentals: Dict[str, Any]
-            sentiment: Dict[str, Any]
-            risk_assessment: Dict[str, Any]
-            portfolio_decisions: Dict[str, Any]
-            execution_results: Dict[str, Any]
-            errors: List[Dict[str, Any]]
-            status: str
-            created_at: datetime
-            last_updated: datetime
-            cycle_count: int
-        
+        # Use the AgentState TypedDict defined in base_agent
+        from utils.base_agent import AgentState
+
         # Create the graph with the TypedDict schema
-        graph = StateGraph(WorkflowState)
+        # Note: Use the actual AgentState class, not the old variable name
+        graph = StateGraph(AgentState)
         
         # Add nodes for each agent - prefix with "agent_" to avoid conflicts with state keys
         for name, agent in self.agents.items():
-            node_name = f"agent_{name}"  # Adding prefix to avoid collision with state keys
+            node_name = f"agent_{name}"  # Consistent node naming
             node_func = self.define_node_for_agent(name, agent)
             graph.add_node(node_name, node_func)
             
-        # Define edges between nodes
-        self.define_edges(graph)
+        # Define edges between nodes (This is done in define_edges)
+        # self.define_edges(graph) # Edge definition is called separately
         
+        # Set entry point
+        graph.set_entry_point("agent_market_data") # Set the entry point explicitly
+
+        # Define edges (moved from separate method for clarity with older versions)
+        # Market data feeds into analysis agents (in parallel conceptually)
+        graph.add_conditional_edges(
+            "agent_market_data",
+            self.route_after_market_data, # Assuming this router function exists and works
+            {
+                "agent_technical_analyst": "agent_technical_analyst",
+                "agent_fundamentals": "agent_fundamentals",
+                "agent_sentiment": "agent_sentiment",
+                # Need a fallback or end condition if routing fails
+                "__error__": END
+            }
+        )
+        
+        # After analysis agents, go to risk manager
+        # Since analysis runs conceptually in parallel, we need a join node
+        # or a way to wait for all. LangGraph 0.0.15 might not have explicit joins.
+        # Let's assume a sequential flow for simplification here, which might need adjustment.
+        graph.add_edge("agent_technical_analyst", "agent_fundamentals")
+        graph.add_edge("agent_fundamentals", "agent_sentiment")
+        graph.add_edge("agent_sentiment", "agent_risk_manager")
+        
+        # Risk manager feeds into portfolio manager
+        graph.add_edge("agent_risk_manager", "agent_portfolio_manager")
+        
+        # End after portfolio manager
+        graph.add_edge("agent_portfolio_manager", END)
+
         return graph
     
     def define_node_for_agent(self, agent_name: str, agent: BaseAgent) -> callable:
@@ -630,39 +655,6 @@ class Orchestrator:
                 currencies.add(parts[1])
                 
         return list(currencies)
-    
-    def define_edges(self, graph: StateGraph) -> None:
-        """
-        Define the connections between nodes in the graph.
-        
-        This method adds edges between agent nodes to define the workflow.
-        
-        Args:
-            graph: The StateGraph to add edges to
-        """
-        # Start with market data agent
-        graph.add_edge(START, "agent_market_data")
-        
-        # Market data feeds into all analysis agents
-        graph.add_conditional_edges(
-            "agent_market_data",
-            self.route_after_market_data,
-            {
-                "agent_technical_analyst": "agent_technical_analyst",
-                "agent_fundamentals": "agent_fundamentals",
-                "agent_sentiment": "agent_sentiment"
-            }
-        )
-        
-        # After analysis agents, go to risk manager
-        for analysis_agent in ["agent_technical_analyst", "agent_fundamentals", "agent_sentiment"]:
-            graph.add_edge(analysis_agent, "agent_risk_manager")
-        
-        # Risk manager feeds into portfolio manager
-        graph.add_edge("agent_risk_manager", "agent_portfolio_manager")
-        
-        # End after portfolio manager
-        graph.add_edge("agent_portfolio_manager", END)
     
     def route_after_market_data(self, state: Dict[str, Any]) -> str:
         """

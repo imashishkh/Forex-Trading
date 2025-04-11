@@ -3745,3 +3745,337 @@ KeyError: 'Unknown environment: https://api-fxpractice.oanda.com'
 2025-04-11 16:24:20,739 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
 2025-04-11 16:24:25,466 - ForexMonitoring - INFO - Monitoring stopped
 2025-04-11 16:24:25,466 - ForexMonitoring - INFO - shutdown: Monitoring system stopped
+2025-04-11 23:07:37,759 - forex_trading - INFO - Logging initialized at level: INFO
+2025-04-11 23:07:37,762 - ConfigManager - INFO - Loaded configuration from config/settings.json
+2025-04-11 23:07:37,766 - forex_trading - INFO - Forex Trading Platform initialized
+2025-04-11 23:07:37,766 - forex_trading - INFO - Starting Forex Trading Platform in live mode
+2025-04-11 23:07:37,767 - ForexMonitoring - INFO - Loaded OpenAI API key from environment variable.
+2025-04-11 23:07:37,768 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-11 23:07:38,529 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:07:38,530 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-11 23:07:38,530 - ForexMonitoring - INFO - Successfully connected to OANDA account via WalletManager
+2025-04-11 23:07:38,530 - ForexMonitoring - INFO - initialization: WalletManager connected successfully
+2025-04-11 23:07:38,570 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][init] Agent market_data_agent initialized
+2025-04-11 23:07:38,570 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][init] Market Data Agent initialized. Practice mode: True
+2025-04-11 23:07:38,570 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][initialize] Initializing Market Data Agent
+2025-04-11 23:07:38,570 - ForexMonitoring - ERROR - Error initializing MarketDataAgent: 'MarketDataAgent' object has no attribute 'use_mock_data'
+2025-04-11 23:07:38,570 - ForexMonitoring - ERROR - initialization: MarketDataAgent initialization error: 'MarketDataAgent' object has no attribute 'use_mock_data'
+2025-04-11 23:07:38,570 - ForexMonitoring - INFO - SYSTEM: Alert system initialized
+2025-04-11 23:07:38,570 - ForexMonitoring - INFO - Monitoring Dashboard initialized
+2025-04-11 23:07:38,570 - forex_trading.orchestrator - INFO - Monitoring dashboard initialized
+2025-04-11 23:07:38,570 - forex_trading.orchestrator - INFO - Orchestrator initialized with workflow ID: 9878d540-0e61-4fcc-8110-70cf8d9a50c8
+2025-04-11 23:07:38,571 - forex_trading.orchestrator - INFO - Initializing all agents
+2025-04-11 23:07:38,581 - forex_trading.orchestrator.market_data_agent - INFO - [market_data_agent][init] Agent market_data_agent initialized
+2025-04-11 23:07:38,581 - forex_trading.orchestrator.market_data_agent - INFO - [market_data_agent][init] Market Data Agent initialized. Practice mode: True
+2025-04-11 23:07:38,590 - forex_trading.orchestrator.technical_analyst_agent - INFO - [technical_analyst_agent][init] Agent technical_analyst_agent initialized
+2025-04-11 23:07:38,590 - forex_trading.orchestrator.technical_analyst_agent - INFO - [technical_analyst_agent][init] Technical Analyst Agent initialized with 5 indicator groups
+2025-04-11 23:07:38,598 - forex_trading.orchestrator.fundamentals_agent - INFO - [fundamentals_agent][init] Agent fundamentals_agent initialized
+2025-04-11 23:07:38,598 - forex_trading.orchestrator.fundamentals_agent - INFO - [fundamentals_agent][init] Fundamentals Agent initialized
+2025-04-11 23:07:38,607 - forex_trading.orchestrator.sentiment_agent - INFO - [sentiment_agent][init] Agent sentiment_agent initialized
+2025-04-11 23:07:38,610 - forex_trading.orchestrator.sentiment_agent - INFO - [sentiment_agent][init] Sentiment Agent initialized
+2025-04-11 23:07:38,618 - forex_trading.orchestrator.risk_manager_agent - INFO - [risk_manager_agent][init] Agent risk_manager_agent initialized
+2025-04-11 23:07:38,618 - forex_trading.orchestrator.risk_manager_agent - INFO - [risk_manager_agent][init] Initialized Risk Manager Agent
+2025-04-11 23:07:38,626 - forex_trading.orchestrator.portfolio_manager_agent - INFO - [portfolio_manager_agent][init] Agent portfolio_manager_agent initialized
+2025-04-11 23:07:38,631 - forex_trading.orchestrator.portfolio_manager_agent - INFO - [portfolio_manager_agent][init] Initialized Portfolio Manager Agent
+2025-04-11 23:07:38,631 - forex_trading.orchestrator.market_data_agent - INFO - [market_data_agent][initialize] Initializing Market Data Agent
+2025-04-11 23:07:38,631 - forex_trading.orchestrator - ERROR - Error initializing agents: 'MarketDataAgent' object has no attribute 'use_mock_data'
+Traceback (most recent call last):
+  File "/Users/ashish/Projects/Forex Trading/orchestrator.py", line 209, in initialize_agents
+    success = agent.initialize()
+  File "/Users/ashish/Projects/Forex Trading/market_data_agent/agent.py", line 132, in initialize
+    if self.use_mock_data:
+       ^^^^^^^^^^^^^^^^^^
+AttributeError: 'MarketDataAgent' object has no attribute 'use_mock_data'. Did you mean: '_setup_mock_data'?
+2025-04-11 23:07:38,632 - forex_trading - ERROR - Failed to initialize agents
+2025-04-11 23:07:42,602 - ForexMonitoring - INFO - Loaded OpenAI API key from environment variable.
+2025-04-11 23:07:42,602 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-11 23:07:42,937 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:07:42,938 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-11 23:07:42,938 - ForexMonitoring - INFO - Successfully connected to OANDA account via WalletManager
+2025-04-11 23:07:42,938 - ForexMonitoring - INFO - initialization: WalletManager connected successfully
+2025-04-11 23:07:42,964 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][init] Agent market_data_agent initialized
+2025-04-11 23:07:42,964 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][init] Market Data Agent initialized. Practice mode: True
+2025-04-11 23:07:42,964 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][initialize] Initializing Market Data Agent
+2025-04-11 23:07:42,964 - ForexMonitoring - ERROR - Error initializing MarketDataAgent: 'MarketDataAgent' object has no attribute 'use_mock_data'
+2025-04-11 23:07:42,964 - ForexMonitoring - ERROR - initialization: MarketDataAgent initialization error: 'MarketDataAgent' object has no attribute 'use_mock_data'
+2025-04-11 23:07:42,964 - ForexMonitoring - INFO - SYSTEM: Alert system initialized
+2025-04-11 23:07:42,964 - ForexMonitoring - INFO - Monitoring Dashboard initialized
+2025-04-11 23:07:42,964 - ForexMonitoring - WARNING - Agent market_data_agent is not active. Status: not_initialized
+2025-04-11 23:07:42,964 - ForexMonitoring - INFO - Monitoring started
+2025-04-11 23:07:42,964 - ForexMonitoring - WARNING - Agent technical_analysis is not active. Status: unknown
+2025-04-11 23:07:42,964 - ForexMonitoring - INFO - startup: Monitoring system started
+2025-04-11 23:07:42,964 - ForexMonitoring - WARNING - Agent portfolio_manager is not active. Status: unknown
+2025-04-11 23:07:42,965 - ForexMonitoring - WARNING - Agent risk_manager is not active. Status: unknown
+2025-04-11 23:07:44,186 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:07:44,857 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:44,859 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:07:45,209 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:45,211 - WalletManager - INFO - Available margin: 90001.671
+2025-04-11 23:07:45,547 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:45,548 - WalletManager - INFO - Margin used: 11.314
+2025-04-11 23:07:45,866 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:46,185 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:46,186 - WalletManager - INFO - Available margin: 90001.671
+2025-04-11 23:07:46,492 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:46,493 - WalletManager - INFO - Margin used: 11.3138
+2025-04-11 23:07:46,844 - ForexMonitoring - INFO - Loaded OpenAI API key from environment variable.
+2025-04-11 23:07:46,845 - WalletManager - INFO - WalletManager initialized. Ready to connect to OANDA account.
+2025-04-11 23:07:46,848 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:46,849 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:07:47,156 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:07:47,158 - WalletManager - INFO - Successfully connected to OANDA account 101-001-31446732-001
+2025-04-11 23:07:47,158 - ForexMonitoring - INFO - Successfully connected to OANDA account via WalletManager
+2025-04-11 23:07:47,158 - ForexMonitoring - INFO - initialization: WalletManager connected successfully
+2025-04-11 23:07:47,161 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:47,162 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:07:47,167 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][init] Agent market_data_agent initialized
+2025-04-11 23:07:47,167 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][init] Market Data Agent initialized. Practice mode: True
+2025-04-11 23:07:47,167 - ForexMonitoring.MarketDataAgent - INFO - [market_data_agent][initialize] Initializing Market Data Agent
+2025-04-11 23:07:47,167 - ForexMonitoring - ERROR - Error initializing MarketDataAgent: 'MarketDataAgent' object has no attribute 'use_mock_data'
+2025-04-11 23:07:47,167 - ForexMonitoring - ERROR - initialization: MarketDataAgent initialization error: 'MarketDataAgent' object has no attribute 'use_mock_data'
+2025-04-11 23:07:47,167 - ForexMonitoring - INFO - SYSTEM: Alert system initialized
+2025-04-11 23:07:47,167 - ForexMonitoring - INFO - Monitoring Dashboard initialized
+2025-04-11 23:07:47,167 - ForexMonitoring - WARNING - Agent market_data_agent is not active. Status: not_initialized
+2025-04-11 23:07:47,167 - ForexMonitoring - INFO - Monitoring started
+2025-04-11 23:07:47,167 - ForexMonitoring - WARNING - Agent technical_analysis is not active. Status: unknown
+2025-04-11 23:07:47,167 - ForexMonitoring - INFO - startup: Monitoring system started
+2025-04-11 23:07:47,167 - ForexMonitoring - WARNING - Agent portfolio_manager is not active. Status: unknown
+2025-04-11 23:07:47,168 - ForexMonitoring - WARNING - Agent risk_manager is not active. Status: unknown
+2025-04-11 23:07:47,474 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:47,579 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:07:47,791 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:47,792 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:07:48,100 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:48,101 - WalletManager - INFO - Available margin: 90001.671
+2025-04-11 23:07:48,202 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:48,203 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:07:48,401 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:48,402 - WalletManager - INFO - Margin used: 11.314
+2025-04-11 23:07:48,537 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:48,538 - WalletManager - INFO - Available margin: 90001.671
+2025-04-11 23:07:48,713 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:48,841 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:48,842 - WalletManager - INFO - Margin used: 11.314
+2025-04-11 23:07:49,029 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:49,030 - WalletManager - INFO - Available margin: 90001.7151
+2025-04-11 23:07:49,411 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:49,413 - WalletManager - INFO - Margin used: 11.3148
+2025-04-11 23:07:49,820 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:49,821 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:07:49,975 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:50,342 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:50,343 - WalletManager - INFO - Available margin: 90001.7249
+2025-04-11 23:07:50,366 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:50,367 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:07:50,741 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:50,742 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:50,743 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:07:50,743 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:07:50,743 - WalletManager - INFO - Margin used: 11.315
+2025-04-11 23:07:50,744 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:07:50,744 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:07:50,744 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:07:50,744 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:07:51,150 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:51,152 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:07:52,316 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:52,318 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:07:52,688 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:53,096 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:53,097 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:07:53,508 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:53,509 - WalletManager - INFO - Available margin: 90001.769
+2025-04-11 23:07:53,916 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:53,917 - WalletManager - INFO - Margin used: 11.3164
+2025-04-11 23:07:54,324 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:54,734 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:54,736 - WalletManager - INFO - Available margin: 90001.8082
+2025-04-11 23:07:55,046 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:55,047 - WalletManager - INFO - Margin used: 11.3168
+2025-04-11 23:07:55,362 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:55,363 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:07:55,679 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:55,680 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:07:55,749 - ForexMonitoring - WARNING - Agent market_data_agent is not active. Status: not_initialized
+2025-04-11 23:07:55,749 - ForexMonitoring - WARNING - Agent technical_analysis is not active. Status: unknown
+2025-04-11 23:07:55,749 - ForexMonitoring - WARNING - Agent portfolio_manager is not active. Status: unknown
+2025-04-11 23:07:55,749 - ForexMonitoring - WARNING - Agent risk_manager is not active. Status: unknown
+2025-04-11 23:07:56,002 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:56,003 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:07:56,003 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:07:56,003 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:07:56,003 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:07:56,003 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:07:56,003 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:07:56,167 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:07:56,787 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:56,789 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:07:57,192 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:57,193 - WalletManager - INFO - Available margin: 90001.8474
+2025-04-11 23:07:57,604 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:57,605 - WalletManager - INFO - Margin used: 11.3176
+2025-04-11 23:07:57,907 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:59,137 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:59,138 - WalletManager - INFO - Available margin: 90001.9062
+2025-04-11 23:07:59,442 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:59,443 - WalletManager - INFO - Margin used: 11.3188
+2025-04-11 23:07:59,783 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:07:59,783 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:00,160 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:00,160 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:00,482 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:00,796 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:00,796 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:01,009 - ForexMonitoring - WARNING - Agent market_data_agent is not active. Status: not_initialized
+2025-04-11 23:08:01,009 - ForexMonitoring - WARNING - Agent technical_analysis is not active. Status: unknown
+2025-04-11 23:08:01,009 - ForexMonitoring - WARNING - Agent portfolio_manager is not active. Status: unknown
+2025-04-11 23:08:01,009 - ForexMonitoring - WARNING - Agent risk_manager is not active. Status: unknown
+2025-04-11 23:08:01,109 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:01,110 - WalletManager - INFO - Available margin: 90001.916
+2025-04-11 23:08:01,492 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:08:01,492 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:01,493 - WalletManager - INFO - Margin used: 11.319
+2025-04-11 23:08:01,835 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:02,212 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:02,212 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:02,213 - WalletManager - INFO - Available margin: 90001.916
+2025-04-11 23:08:02,214 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:02,621 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:02,621 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:02,622 - WalletManager - INFO - Margin used: 11.319
+2025-04-11 23:08:02,622 - WalletManager - INFO - Available margin: 90001.916
+2025-04-11 23:08:03,029 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:03,029 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:03,029 - WalletManager - INFO - Margin used: 11.319
+2025-04-11 23:08:03,030 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:03,438 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:03,439 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:03,440 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:03,746 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:03,748 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:03,748 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:03,748 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:03,748 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:03,748 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:03,748 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:03,759 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:03,761 - WalletManager - INFO - Available margin: 90001.916
+2025-04-11 23:08:04,085 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:04,085 - WalletManager - INFO - Margin used: 11.319
+2025-04-11 23:08:04,412 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:04,412 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:04,732 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:04,733 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:05,147 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:05,489 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:05,491 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:05,898 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:05,899 - WalletManager - INFO - Available margin: 90001.9503
+2025-04-11 23:08:06,235 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:06,237 - WalletManager - INFO - Margin used: 11.3201
+2025-04-11 23:08:06,577 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:06,898 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:06,899 - WalletManager - INFO - Available margin: 90001.9552
+2025-04-11 23:08:07,208 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:07,210 - WalletManager - INFO - Margin used: 11.3197
+2025-04-11 23:08:07,553 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:07,554 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:07,851 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:07,853 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:08,156 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:08,157 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:08,157 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:08,157 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:08,157 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:08,157 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:08,157 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:08,751 - ForexMonitoring - WARNING - Agent market_data_agent is not active. Status: not_initialized
+2025-04-11 23:08:08,751 - ForexMonitoring - WARNING - Agent technical_analysis is not active. Status: unknown
+2025-04-11 23:08:08,751 - ForexMonitoring - WARNING - Agent portfolio_manager is not active. Status: unknown
+2025-04-11 23:08:08,751 - ForexMonitoring - WARNING - Agent risk_manager is not active. Status: unknown
+2025-04-11 23:08:09,158 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:08:09,784 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:09,786 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:10,107 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:10,109 - WalletManager - INFO - Available margin: 90001.8964
+2025-04-11 23:08:10,436 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:10,437 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:10,876 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:11,185 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:11,187 - WalletManager - INFO - Available margin: 90001.8964
+2025-04-11 23:08:11,503 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:11,504 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:11,809 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:11,810 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:12,112 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:12,112 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:12,412 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:12,729 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:12,730 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:13,049 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:13,050 - WalletManager - INFO - Available margin: 90001.8964
+2025-04-11 23:08:13,161 - ForexMonitoring - WARNING - Agent market_data_agent is not active. Status: not_initialized
+2025-04-11 23:08:13,161 - ForexMonitoring - WARNING - Agent technical_analysis is not active. Status: unknown
+2025-04-11 23:08:13,161 - ForexMonitoring - WARNING - Agent portfolio_manager is not active. Status: unknown
+2025-04-11 23:08:13,161 - ForexMonitoring - WARNING - Agent risk_manager is not active. Status: unknown
+2025-04-11 23:08:13,355 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:13,357 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:13,561 - WalletManager - INFO - Successfully retrieved account details
+2025-04-11 23:08:13,660 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:13,965 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:13,967 - WalletManager - INFO - Available margin: 90001.8964
+2025-04-11 23:08:14,262 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:14,263 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:14,270 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:14,272 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:14,570 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:14,572 - WalletManager - INFO - Available margin: 90001.8964
+2025-04-11 23:08:14,595 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:14,596 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:14,909 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:14,909 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:14,911 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:14,912 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:15,221 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:15,234 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:15,237 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:15,237 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:15,237 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:15,237 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:15,237 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:15,237 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:15,525 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:15,526 - WalletManager - INFO - Available margin: 90001.8866
+2025-04-11 23:08:15,829 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:15,829 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:16,129 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:16,130 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:16,443 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:16,444 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:16,761 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:17,060 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:17,061 - WalletManager - INFO - Current account balance: 89999.91
+2025-04-11 23:08:17,363 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:17,364 - WalletManager - INFO - Available margin: 90001.8964
+2025-04-11 23:08:17,682 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:17,684 - WalletManager - INFO - Margin used: 11.3186
+2025-04-11 23:08:18,000 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:18,076 - ForexMonitoring - INFO - Monitoring stopped
+2025-04-11 23:08:18,076 - ForexMonitoring - INFO - shutdown: Monitoring system stopped
+2025-04-11 23:08:18,310 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:18,311 - WalletManager - INFO - Available margin: 90001.8866
+2025-04-11 23:08:18,797 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:18,799 - WalletManager - INFO - Margin used: 11.3184
+2025-04-11 23:08:19,118 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:19,119 - WalletManager - INFO - Margin closeout percentage: 0.01%
+2025-04-11 23:08:19,423 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:19,425 - WalletManager - INFO - Margin closeout value: 0.0
+2025-04-11 23:08:19,733 - WalletManager - INFO - Successfully retrieved account summary
+2025-04-11 23:08:19,733 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:19,733 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:19,734 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:19,734 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real price data.
+2025-04-11 23:08:19,734 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real market data.
+2025-04-11 23:08:19,734 - ForexMonitoring - WARNING - MarketDataAgent not available. Cannot fetch real spread data.
+2025-04-11 23:08:22,282 - ForexMonitoring - INFO - Monitoring stopped
+2025-04-11 23:08:22,283 - ForexMonitoring - INFO - shutdown: Monitoring system stopped

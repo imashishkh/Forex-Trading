@@ -211,13 +211,26 @@ class MarketDataAgent(BaseAgent):
         try:
             # Request account details to verify connection
             r = accounts.AccountSummary(accountID=self.account_id)
-            self.api_client = API(access_token=self.access_token, environment=self.api_url)
+
+            # --- FIX: Convert URL to environment name for API client --- 
+            environment_name = "practice" if "fxpractice" in self.api_url else "live"
+            self.api_client = API(access_token=self.access_token, environment=environment_name)
+            # --- END FIX ---
+
             self.api_client.request(r)
             
+            self.log_action("_test_api_connection", "Successfully connected to OANDA API.")
             return True
         except V20Error as e:
-            self.handle_error(e)
-            raise ConnectionError(f"Failed to connect to OANDA API: {str(e)}")
+            error_message = f"Failed to connect to OANDA API in _test_api_connection ({self.api_url}): {str(e)}"
+            self.log_action("_test_api_connection", error_message, level="error")
+            # self.handle_error(e) # Consider if specific handling is needed
+            # Re-raise or return False depending on desired behavior. Raising allows caller to handle.
+            raise ConnectionError(error_message)
+        except Exception as e: # Catch other potential errors
+            error_message = f"Unexpected error during OANDA connection test in _test_api_connection ({self.api_url}): {str(e)}"
+            self.log_action("_test_api_connection", error_message, level="error")
+            raise ConnectionError(error_message)
     
     def _fetch_available_instruments(self) -> None:
         """
@@ -1256,13 +1269,27 @@ class MarketDataAgent(BaseAgent):
         try:
             # Request account details to verify connection
             r = accounts.AccountSummary(accountID=self.account_id)
-            self.api_client = API(access_token=self.access_token, environment=self.api_url)
+            
+            # --- FIX: Convert URL to environment name for API client --- 
+            environment_name = "practice" if "fxpractice" in self.api_url else "live"
+            self.api_client = API(access_token=self.access_token, environment=environment_name)
+            # --- END FIX ---
+            
             self.api_client.request(r)
             
+            self.log_action("test_connection", "Successfully connected to OANDA API.")
             return True
         except V20Error as e:
-            self.handle_error(e)
-            raise ConnectionError(f"Failed to connect to OANDA API: {str(e)}")
+            error_message = f"Failed to connect to OANDA API ({self.api_url}): {str(e)}"
+            self.log_action("test_connection", error_message, level="error")
+            self.status = "error"
+            # Do not raise ConnectionError here, return False as per method signature
+            return False
+        except Exception as e: # Catch other potential errors like invalid URL format
+            error_message = f"Unexpected error during OANDA connection test ({self.api_url}): {str(e)}"
+            self.log_action("test_connection", error_message, level="error")
+            self.status = "error"
+            return False
         
     def _fetch_oanda_order_book(self, instrument: str) -> Dict[str, Any]:
         """

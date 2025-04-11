@@ -19,16 +19,43 @@ import time
 import json
 import importlib
 import datetime
+import traceback
+import asyncio
 from typing import Dict, List, Any, Optional, Tuple, Union, Set
 from pathlib import Path
 
 # Third-party imports
-import dotenv
-import importlib.metadata
+try:
+    from dotenv import load_dotenv
+except ImportError:
+    print("Warning: python-dotenv not installed. Environment variables must be set manually.")
+    def load_dotenv(**kwargs):
+        pass
+
+try:
+    from colorama import Fore, Style, init
+    init()
+except ImportError:
+    print("Warning: colorama not installed. Console output will not be colored.")
+    class Fore:
+        RED = ""
+        GREEN = ""
+        YELLOW = ""
+        BLUE = ""
+        RESET = ""
+    
+    class Style:
+        BRIGHT = ""
+        RESET_ALL = ""
 
 # Local imports
 from orchestrator import Orchestrator
 from utils.config_manager import ConfigManager
+try:
+    from monitoring import MonitoringDashboard
+except ImportError:
+    print("Warning: MonitoringDashboard not found or monitoring.py has issues. Monitoring disabled.")
+    MonitoringDashboard = None
 
 def load_environment_variables() -> bool:
     """
@@ -41,7 +68,7 @@ def load_environment_variables() -> bool:
         # Load .env file
         env_path = Path('.env')
         if env_path.exists():
-            dotenv.load_dotenv(dotenv_path=env_path)
+            load_dotenv(dotenv_path=env_path)
             return True
         else:
             print("Warning: .env file not found. Using existing environment variables.")

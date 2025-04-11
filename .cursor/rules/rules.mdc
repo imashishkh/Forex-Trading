@@ -1,0 +1,144 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+{
+  "description": "Forex Trading AI Agent System - Rules for Cursor AI",
+  "globs": ["**/*.py", "**/*.js", "**/*.json", "**/*.md"],
+  "alwaysApply": true,
+  "rules": {
+    "architecture": {
+      "description": "Architecture guidelines for the Forex Trading AI Agent System",
+      "patterns": [
+        "The system follows a multi-agent architecture with specialized agents communicating through a central orchestrator",
+        "Each agent has a specific role and responsibility in the trading decision process",
+        "The system uses LangGraph for agent workflow orchestration",
+        "All agents must implement a standard interface for communication",
+        "The system operates in live trading mode only, connecting to OANDA API for real-time data and trade execution"
+      ]
+    },
+    "codeOrganization": {
+      "description": "Code organization and structure guidelines",
+      "patterns": [
+        "Project follows a modular structure with clear separation of concerns",
+        "Agents are defined in the 'agents/' directory with each agent in its own file",
+        "Trading strategies are implemented in the 'strategies/' directory",
+        "Market data handling is in the 'data/' directory",
+        "Configuration is stored in 'config/' directory with environment variables in .env file",
+        "Utility functions are in the 'utils/' directory",
+        "Logging is centralized and configured in 'utils/logger.py'"
+      ]
+    },
+    "tradingLogic": {
+      "description": "Guidelines for implementing trading logic",
+      "patterns": [
+        "All trading decisions must go through risk management checks",
+        "Technical analysis should use established indicators from TA-Lib or similar libraries",
+        "Market data should be cached appropriately to avoid redundant API calls",
+        "Trading strategies should be backtested before deployment",
+        "Position sizing should be based on account balance and risk parameters",
+        "All trades must have stop-loss and take-profit levels defined"
+      ]
+    },
+    "apiIntegration": {
+      "description": "Guidelines for API integration",
+      "patterns": [
+        "Use OANDA API for forex trading execution",
+        "API credentials should be stored in environment variables, never hardcoded",
+        "Implement proper error handling for all API calls",
+        "Use rate limiting to avoid API throttling",
+        "Implement retry logic for failed API calls",
+        "Cache API responses where appropriate to minimize calls"
+      ]
+    },
+    "aiAgents": {
+      "description": "Guidelines for AI agent implementation",
+      "patterns": [
+        "Use LangChain and LangGraph for agent implementation",
+        "Each agent should have a clear, single responsibility",
+        "Agents should communicate through structured messages",
+        "Implement proper error handling in agent logic",
+        "Use appropriate LLM models for different agent tasks",
+        "Implement memory for agents that need to maintain state"
+      ]
+    },
+    "dataManagement": {
+      "description": "Guidelines for data management",
+      "patterns": [
+        "Market data should be properly structured and validated",
+        "Historical data should be stored efficiently for analysis",
+        "Implement proper data cleaning and preprocessing",
+        "Use appropriate data structures for different types of data",
+        "Implement data versioning for reproducibility",
+        "Ensure data consistency across the system"
+      ]
+    },
+    "errorHandling": {
+      "description": "Guidelines for error handling",
+      "patterns": [
+        "Use try-except blocks for all external API calls",
+        "Log all errors with appropriate context",
+        "Implement graceful degradation for non-critical failures",
+        "Use specific exception types for different error scenarios",
+        "Implement proper cleanup in error scenarios",
+        "Notify system administrators of critical errors"
+      ]
+    },
+    "security": {
+      "description": "Security guidelines",
+      "patterns": [
+        "Never hardcode credentials or API keys",
+        "Use environment variables for sensitive information",
+        "Implement proper authentication for all external services",
+        "Validate all input data",
+        "Implement proper access controls",
+        "Follow the principle of least privilege"
+      ]
+    },
+    "performance": {
+      "description": "Performance guidelines",
+      "patterns": [
+        "Optimize code for critical paths",
+        "Use asynchronous programming where appropriate",
+        "Implement caching for expensive operations",
+        "Monitor system resource usage",
+        "Implement proper garbage collection",
+        "Use appropriate data structures for performance-critical operations"
+      ]
+    },
+    "testing": {
+      "description": "Testing guidelines",
+      "patterns": [
+        "Write unit tests for all critical components",
+        "Implement integration tests for agent interactions",
+        "Test trading strategies with historical data",
+        "Implement proper mocking for external dependencies",
+        "Use continuous integration for automated testing",
+        "Maintain high test coverage for critical components"
+      ]
+    },
+    "documentation": {
+      "description": "Documentation guidelines",
+      "patterns": [
+        "Document all public APIs and interfaces",
+        "Use docstrings for all functions and classes",
+        "Maintain up-to-date README files",
+        "Document system architecture and design decisions",
+        "Include examples for complex functionality",
+        "Document configuration options and environment variables"
+      ]
+    },
+    "deployment": {
+      "description": "Deployment guidelines",
+      "patterns": [
+        "Use containerization for consistent deployment",
+        "Implement proper logging for production environments",
+        "Use environment-specific configuration",
+        "Implement health checks for monitoring",
+        "Use proper versioning for releases",
+        "Document deployment procedures"
+      ]
+    }
+  }
+}
