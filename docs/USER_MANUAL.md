@@ -32,7 +32,7 @@ The Forex Trading Platform is a comprehensive AI-powered trading system that sup
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/username/forex-trading.git
+   git clone https://github.com/imashishkh/forex-trading.git
    cd forex-trading
    ```
 

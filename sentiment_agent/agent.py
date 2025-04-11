@@ -3066,3 +3066,110 @@ class SentimentAgent(BaseAgent):
             return state
             
         return sentiment_node 
+
+    def run_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Execute sentiment analysis tasks on forex market data.
+        
+        This method implements the abstract method from BaseAgent and serves
+        as the primary entry point for sentiment analysis operations.
+        
+        Args:
+            task: Task description and parameters including:
+                - type: Type of analysis to perform (e.g., "news", "social", "combined")
+                - currency: The currency or currency pair to analyze
+                - sources: Optional specific sources to analyze
+                - timeframe: Optional timeframe for analysis
+
+        Returns:
+            Dict[str, Any]: Task execution results including:
+                - status: "success" or "error"
+                - sentiment: Sentiment analysis results
+                - confidence: Confidence scores
+                - sources: Source breakdown of sentiment
+        """
+        self.log_action("run_task", f"Running task: {task.get('type', 'Unknown')}")
+        
+        # Update state
+        self.state["tasks"].append(task)
+        self.last_active = datetime.now()
+        self.state["last_active"] = self.last_active
+        
+        try:
+            task_type = task.get("type", "combined")
+            currency = task.get("currency", "EUR/USD")
+            
+            # Normalize currency format if needed
+            currency = currency.replace("_", "/") if "_" in currency else currency
+            
+            # Set up timeframe
+            timeframe = task.get("timeframe", "24h")
+            
+            if task_type == "news":
+                # Analyze news sentiment
+                sources = task.get("sources", self.news_sources)
+                news_sentiment = self.analyze_news_sentiment(currency, sources, timeframe)
+                
+                return {
+                    "status": "success",
+                    "sentiment": news_sentiment.get("sentiment", 0),
+                    "confidence": news_sentiment.get("confidence", 0),
+                    "sources": news_sentiment.get("sources", {}),
+                    "articles": news_sentiment.get("articles", []),
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "social":
+                # Analyze social media sentiment
+                platforms = task.get("platforms", self.social_platforms)
+                social_sentiment = self.analyze_social_sentiment(currency, platforms, timeframe)
+                
+                return {
+                    "status": "success",
+                    "sentiment": social_sentiment.get("sentiment", 0),
+                    "confidence": social_sentiment.get("confidence", 0),
+                    "platforms": social_sentiment.get("platforms", {}),
+                    "posts": social_sentiment.get("sample_posts", []),
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "combined" or task_type == "all":
+                # Combine news and social sentiment analysis
+                combined_sentiment = self.get_combined_sentiment(currency, timeframe)
+                
+                return {
+                    "status": "success",
+                    "sentiment": combined_sentiment.get("sentiment", 0),
+                    "confidence": combined_sentiment.get("confidence", 0),
+                    "breakdown": {
+                        "news": combined_sentiment.get("news_sentiment", 0),
+                        "social": combined_sentiment.get("social_sentiment", 0)
+                    },
+                    "impact": combined_sentiment.get("market_impact", "neutral"),
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "historical":
+                # Get historical sentiment trends
+                days = int(task.get("days", 7))
+                historical_data = self.get_historical_sentiment(currency, days)
+                
+                return {
+                    "status": "success",
+                    "historical_data": historical_data,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            else:
+                return {
+                    "status": "error",
+                    "message": f"Unknown task type: {task_type}"
+                }
+                
+        except Exception as e:
+            self.handle_error(e)
+            return {
+                "status": "error",
+                "message": str(e),
+                "timestamp": datetime.now().isoformat()
+            }

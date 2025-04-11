@@ -18,7 +18,7 @@ import traceback
 
 # LangChain and LangGraph imports
 try:
-    from langchain_community.chat_models import ChatOpenAI
+    from langchain_openai import ChatOpenAI
 except ImportError:
     from langchain.chat_models import ChatOpenAI
     

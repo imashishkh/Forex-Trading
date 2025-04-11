@@ -38,6 +38,7 @@ from portfolio_manager_agent.agent import PortfolioManagerAgent
 # Utils
 from utils.config_manager import ConfigManager
 from utils.base_agent import BaseAgent, AgentState, AgentMessage
+from monitoring import MonitoringDashboard
 
 # Configure logging
 logging.basicConfig(
@@ -112,6 +113,15 @@ class Orchestrator:
             "errors": [],
             "successful_cycles": 0
         }
+        
+        # Initialize monitoring dashboard
+        self.monitoring_dashboard = None
+        if self.config.get("monitoring", {}).get("enabled", True):
+            try:
+                self.monitoring_dashboard = MonitoringDashboard()
+                self.logger.info("Monitoring dashboard initialized")
+            except Exception as e:
+                self.logger.error(f"Failed to initialize monitoring dashboard: {str(e)}")
         
         self.logger.info("Orchestrator initialized with workflow ID: %s", self.workflow_id) 
 
@@ -249,9 +259,13 @@ class Orchestrator:
                 self.agent_status[name] = "running"
                 self.logger.info(f"Agent started: {name}")
                 
+                # Start monitoring dashboard if enabled
+                if self.monitoring_dashboard and not self.monitoring_dashboard.should_run:
+                    self.monitoring_dashboard.start_monitoring()
+                    self.logger.info("Monitoring dashboard started")
+                
             except Exception as e:
-                self.logger.error(f"Error starting agent {name}: {str(e)}", exc_info=True)
-                self.agent_status[name] = "error"
+                self.logger.error(f"Error starting agent {name}: {str(e)}")
                 success = False
         
         return success
@@ -382,38 +396,41 @@ class Orchestrator:
     
     def create_graph(self) -> StateGraph:
         """
-        Create the LangGraph graph structure.
-        
-        This method creates a StateGraph with all the necessary nodes
-        and edges to define the workflow between agents.
+        Create a LangGraph workflow graph with all agents as nodes.
         
         Returns:
-            StateGraph: The configured LangGraph graph
+            StateGraph: The configured workflow graph
         """
-        # Create a state graph
-        state_schema = {
-            "workflow_id": str,
-            "messages": list,
-            "market_data": dict,
-            "technical_analysis": dict,
-            "fundamentals": dict,
-            "sentiment": dict,
-            "risk_assessment": dict,
-            "portfolio_decisions": dict,
-            "execution_results": dict,
-            "errors": list,
-            "status": str,
-            "created_at": datetime,
-            "last_updated": datetime,
-            "cycle_count": int
-        }
+        # Import here to avoid circular imports
+        from typing import List, Dict, Any, TypedDict
+        from datetime import datetime
+        import langgraph.graph as lg
+        from langgraph.graph import StateGraph
         
-        graph = StateGraph(state_schema)
+        # Define a proper TypedDict for the schema
+        class WorkflowState(TypedDict):
+            workflow_id: str
+            market_data: Dict[str, Any]
+            technical_analysis: Dict[str, Any] 
+            fundamentals: Dict[str, Any]
+            sentiment: Dict[str, Any]
+            risk_assessment: Dict[str, Any]
+            portfolio_decisions: Dict[str, Any]
+            execution_results: Dict[str, Any]
+            errors: List[Dict[str, Any]]
+            status: str
+            created_at: datetime
+            last_updated: datetime
+            cycle_count: int
         
-        # Add nodes for each agent
+        # Create the graph with the TypedDict schema
+        graph = StateGraph(WorkflowState)
+        
+        # Add nodes for each agent - prefix with "agent_" to avoid conflicts with state keys
         for name, agent in self.agents.items():
+            node_name = f"agent_{name}"  # Adding prefix to avoid collision with state keys
             node_func = self.define_node_for_agent(name, agent)
-            graph.add_node(name, node_func)
+            graph.add_node(node_name, node_func)
             
         # Define edges between nodes
         self.define_edges(graph)
@@ -624,28 +641,28 @@ class Orchestrator:
             graph: The StateGraph to add edges to
         """
         # Start with market data agent
-        graph.add_edge(START, "market_data")
+        graph.add_edge(START, "agent_market_data")
         
         # Market data feeds into all analysis agents
         graph.add_conditional_edges(
-            "market_data",
+            "agent_market_data",
             self.route_after_market_data,
             {
-                "technical_analyst": "technical_analyst",
-                "fundamentals": "fundamentals",
-                "sentiment": "sentiment"
+                "agent_technical_analyst": "agent_technical_analyst",
+                "agent_fundamentals": "agent_fundamentals",
+                "agent_sentiment": "agent_sentiment"
             }
         )
         
         # After analysis agents, go to risk manager
-        for analysis_agent in ["technical_analyst", "fundamentals", "sentiment"]:
-            graph.add_edge(analysis_agent, "risk_manager")
+        for analysis_agent in ["agent_technical_analyst", "agent_fundamentals", "agent_sentiment"]:
+            graph.add_edge(analysis_agent, "agent_risk_manager")
         
         # Risk manager feeds into portfolio manager
-        graph.add_edge("risk_manager", "portfolio_manager")
+        graph.add_edge("agent_risk_manager", "agent_portfolio_manager")
         
         # End after portfolio manager
-        graph.add_edge("portfolio_manager", END)
+        graph.add_edge("agent_portfolio_manager", END)
     
     def route_after_market_data(self, state: Dict[str, Any]) -> str:
         """
@@ -663,7 +680,7 @@ class Orchestrator:
         # In practice, we want to run all analysis agents in parallel
         # For LangGraph, we would need a true parallel execution strategy
         # As a workaround, we return a key to start the sequence
-        return "technical_analyst"
+        return "agent_technical_analyst"
     
     def start_workflow(self) -> bool:
         """

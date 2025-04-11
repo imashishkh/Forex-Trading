@@ -68,7 +68,7 @@ DEFAULT_CONFIG = {
         'api_secret': '',             # API secret
         'account_id': '',             # Account ID
         'base_url': '',               # Base URL for API
-        'paper_trading': True         # Whether to use paper trading
+        'paper_trading': False         # Whether to use paper trading
     },
     
     # Backtesting Settings

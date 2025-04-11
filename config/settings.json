@@ -1,0 +1,55 @@
+{
+  "api_credentials": {
+    "openai": {
+      "api_key": "",
+      "model": "gpt-3.5-turbo"
+    },
+    "oanda": {
+      "api_key": "a08f31c9322d39d422f4378718d819c3-0537c3774aea461fbde6cc2f76a4c00d",
+      "account_id": "101-001-31446732-001",
+      "api_url": "https://api-fxpractice.oanda.com"
+    }
+  },
+  "trading": {
+    "risk_per_trade": 1.0,
+    "max_open_trades": 5,
+    "default_stop_loss": 50,
+    "default_take_profit": 100,
+    "paper_trading_mode": false
+  },
+  "system": {
+    "data_storage_path": "data",
+    "cache_enabled": true,
+    "cache_expiry_days": 7
+  },
+  "logging": {
+    "log_level": "INFO",
+    "log_file_path": "logs/forex_trading.log"
+  },
+  "monitoring": {
+    "enabled": true,
+    "dashboard_port": 8501,
+    "update_interval": 5,
+    "agents": ["market_data", "technical_analysis", "portfolio_manager", "risk_manager"],
+    "api_connections": {
+      "oanda": {"url": "https://api-fxpractice.oanda.com", "timeout": 10},
+      "news_api": {"url": "https://newsapi.org", "timeout": 10}
+    },
+    "alerts": {
+      "email": {
+        "enabled": false,
+        "smtp_server": "smtp.gmail.com",
+        "smtp_port": 587,
+        "username": "",
+        "password": "",
+        "recipients": []
+      },
+      "sms": {
+        "enabled": false,
+        "provider": "",
+        "api_key": "",
+        "phone_numbers": []
+      }
+    }
+  }
+} 

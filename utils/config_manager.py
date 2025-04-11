@@ -163,7 +163,7 @@ class ConfigManager:
                 "USD_CAD", "EUR_JPY", "GBP_JPY"
             ],
             "trading_sessions": ["all"],
-            "paper_trading_mode": True
+            "paper_trading_mode": False
         },
         "risk_management": {
             "max_daily_loss": 3.0,  # 3% max daily loss

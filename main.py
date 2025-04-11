@@ -24,7 +24,7 @@ from pathlib import Path
 
 # Third-party imports
 import dotenv
-import pkg_resources
+import importlib.metadata
 
 # Local imports
 from orchestrator import Orchestrator
@@ -253,32 +253,24 @@ def override_config_with_env(config: Dict[str, Any]) -> Dict[str, Any]:
 
 def check_dependencies() -> bool:
     """
-    Check that all required dependencies are installed.
+    Check if all required dependencies are installed.
     
     Returns:
-        bool: True if all dependencies are installed, False otherwise
+        bool: True if all dependencies are present, False otherwise
     """
-    required_packages = [
-        "python-dotenv",
-        "numpy",
-        "pandas",
-        "matplotlib",
-        "openai",
-        "langchain",
-        "langgraph"
-    ]
+    required_packages = ["pandas", "matplotlib", "numpy", "openai"]
     
     missing_packages = []
-    
     for package in required_packages:
         try:
-            pkg_resources.get_distribution(package)
-        except pkg_resources.DistributionNotFound:
+            # Replace pkg_resources with importlib.metadata
+            importlib.metadata.version(package)
+        except importlib.metadata.PackageNotFoundError:
             missing_packages.append(package)
     
     if missing_packages:
         print(f"Missing required packages: {', '.join(missing_packages)}")
-        print("Install them using: pip install " + " ".join(missing_packages))
+        print("Please install them with: pip install " + " ".join(missing_packages))
         return False
     
     return True

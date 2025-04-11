@@ -14,6 +14,7 @@ import logging
 import json
 import threading
 import datetime
+from datetime import timedelta
 from typing import Dict, List, Any, Optional, Tuple, Union, Callable
 
 import pandas as pd
@@ -77,15 +78,7 @@ class MonitoringDashboard:
         # Load environment variables
         load_dotenv()
         
-        self.config = self._load_config(config_path)
-        self.agents = self.config.get("agents", [])
-        self.api_connections = self.config.get("api_connections", {})
-        self.alert_config = self.config.get("alerts", {})
-        
-        # Initialize API clients
-        self.wallet_manager = self._initialize_wallet_manager()
-        self.market_data_agent = self._initialize_market_data_agent()
-        
+        # Initialize data storage first to prevent AttributeError
         # Data storage
         self.system_data = {
             "agent_status": {},
@@ -98,6 +91,26 @@ class MonitoringDashboard:
             "system_events": [],
             "anomalies": []
         }
+        
+        self.config = self._load_config(config_path)
+        # --- FIX: Explicitly load OpenAI API key from environment if available ---
+        openai_api_key = os.getenv('OPENAI_API_KEY')
+        if openai_api_key:
+            if 'api_credentials' not in self.config:
+                self.config['api_credentials'] = {}
+            if 'openai' not in self.config['api_credentials']:
+                self.config['api_credentials']['openai'] = {}
+            self.config['api_credentials']['openai']['api_key'] = openai_api_key
+            logger.info("Loaded OpenAI API key from environment variable.")
+        # --- END FIX ---
+        
+        self.agents = self.config.get("agents", [])
+        self.api_connections = self.config.get("api_connections", {})
+        self.alert_config = self.config.get("alerts", {})
+        
+        # Initialize API clients
+        self.wallet_manager = self._initialize_wallet_manager()
+        self.market_data_agent = self._initialize_market_data_agent()
         
         # Trading data storage
         self.trading_data = {
@@ -179,19 +192,21 @@ class MonitoringDashboard:
     def _initialize_market_data_agent(self) -> MarketDataAgent:
         """
         Initialize the market data agent for market data retrieval.
+        Ensures the agent is initialized with the dashboard's potentially overridden config.
         
         Returns:
             MarketDataAgent instance
         """
         try:
-            # Initialize with ConfigManager to load credentials from .env
-            config_manager = ConfigManager()
+            # --- FIX: Initialize agent with the potentially overridden dashboard config ---
+            market_data_agent = MarketDataAgent(
+                config=self.config.get("market_data", {}), # Pass the correct config section
+                logger=logger.getChild("MarketDataAgent") # Use dashboard logger
+            )
             
-            # Create MarketDataAgent
-            market_data_agent = MarketDataAgent()
-            
-            # Initialize agent to connect to OANDA
+            # The initialize method will use the passed config (including API key if loaded from env)
             success = market_data_agent.initialize()
+            # --- END FIX ---
             
             if success:
                 logger.info("Successfully initialized MarketDataAgent")
@@ -260,51 +275,71 @@ class MonitoringDashboard:
     # 1. System Monitoring Methods
     #--------------------------------------------------
     
-    def monitor_agent_status(self) -> Dict[str, str]:
+    def monitor_agent_status(self) -> Dict[str, Dict[str, Any]]:
         """
         Monitor the status of all agents in the trading system.
         
         Checks if each agent is running, responsive, and its last activity time.
+        Ensures status is always returned as a dictionary.
         
         Returns:
-            Dict mapping agent names to their status
+            Dict mapping agent names to their status dictionary.
         """
         try:
-            agent_status = {}
+            agent_status_dict = {}
+            
+            # --- FIX: Ensure all statuses are dictionaries ---
+            default_status = {"status": "unknown", "last_active": None, "response_time": None}
             
             # Check WalletManager status
             if self.wallet_manager:
-                wallet_status = "active" if self.wallet_manager.is_connected else "inactive"
-                agent_status["wallet_manager"] = wallet_status
+                wallet_conn_status = "active" if self.wallet_manager.is_connected else "inactive"
+                agent_status_dict["wallet_manager"] = {
+                    "status": wallet_conn_status,
+                    "last_active": datetime.datetime.now().isoformat(), # Assuming active if check is done
+                    "response_time": None # WalletManager doesn't have a direct response time metric here
+                }
             else:
-                agent_status["wallet_manager"] = "not_initialized"
+                agent_status_dict["wallet_manager"] = {"status": "not_initialized", "last_active": None, "response_time": None}
             
             # Check MarketDataAgent status
             if self.market_data_agent:
-                market_status = "active" if self.market_data_agent.status == "ready" else "inactive"
-                agent_status["market_data_agent"] = market_status
+                market_conn_status = "active" if self.market_data_agent.status == "ready" else "inactive"
+                agent_status_dict["market_data_agent"] = {
+                    "status": market_conn_status,
+                    "last_active": self.market_data_agent.last_update_time.isoformat() if self.market_data_agent.last_update_time else None,
+                    "response_time": None # Add if available
+                }
             else:
-                agent_status["market_data_agent"] = "not_initialized"
+                 agent_status_dict["market_data_agent"] = {"status": "not_initialized", "last_active": None, "response_time": None}
             
-            # For other configured agents, we'll check if they've been initialized or just use a placeholder
+            # For other configured agents, use default dictionary status
             for agent_name in self.agents:
-                if agent_name not in agent_status:
-                    # Placeholder for other agents that may be added later
-                    agent_status[agent_name] = self.system_data["agent_status"].get(agent_name, "unknown")
+                if agent_name not in agent_status_dict:
+                    # Use previous status if available, otherwise default dictionary
+                    agent_status_dict[agent_name] = self.system_data["agent_status"].get(agent_name, default_status.copy())
+                    # Ensure it's a dictionary even if loaded from potentially old data
+                    if not isinstance(agent_status_dict[agent_name], dict):
+                         agent_status_dict[agent_name] = default_status.copy()
+                         agent_status_dict[agent_name]["status"] = "unknown" # Mark as unknown if type was wrong
+            # --- END FIX ---
             
             # Store the agent status
-            self.system_data["agent_status"] = agent_status
+            self.system_data["agent_status"] = agent_status_dict
             
             # Log if any agent is down
-            for agent, status in agent_status.items():
-                if status not in ["active", "ready"]:
-                    logger.warning(f"Agent {agent} is not active. Status: {status}")
+            for agent, status_data in agent_status_dict.items():
+                # Use .get() safely now
+                current_status = status_data.get("status", "unknown")
+                if current_status not in ["active", "ready"]:
+                    logger.warning(f"Agent {agent} is not active. Status: {current_status}")
             
-            return agent_status
+            return agent_status_dict
             
         except Exception as e:
             logger.error(f"Error monitoring agent status: {str(e)}")
-            return {}
+            # Return previous state or empty dict on error
+            return self.system_data.get("agent_status", {})
     
     def monitor_system_resources(self) -> Dict[str, float]:
         """
@@ -433,6 +468,12 @@ class MonitoringDashboard:
         elif severity == "critical":
             logger.critical(f"{event_type}: {message}")
         
+        # Check if system_data exists and initialize if needed
+        if not hasattr(self, "system_data"):
+            self.system_data = {"system_events": []}
+        elif "system_events" not in self.system_data:
+            self.system_data["system_events"] = []
+            
         # Add to events list
         self.system_data["system_events"].append(event)
         
@@ -1074,25 +1115,36 @@ class MonitoringDashboard:
             # Check for rapid balance changes
             if len(self.trading_data["account_balance"]) > 10:
                 # Get last 10 balance points
-                recent_balances = list(self.trading_data["account_balance"])[-10:]
-                times, balances = zip(*recent_balances)
-                
-                first_balance = balances[0]
-                last_balance = balances[-1]
-                
-                # Calculate percentage change
-                pct_change = ((last_balance - first_balance) / first_balance) * 100
-                
-                # Flag significant drops (more than 10% drop)
-                if pct_change < -10:
-                    anomaly = {
-                        "type": "balance_drop",
-                        "change_percent": pct_change,
-                        "period_hours": round((times[-1] - times[0]).total_seconds() / 3600, 2),
-                        "timestamp": datetime.datetime.now().isoformat(),
-                        "message": f"Significant balance drop: {pct_change:.2f}% in {round((times[-1] - times[0]).total_seconds() / 3600, 2)} hours"
-                    }
-                    anomalies.append(anomaly)
+                recent_balances_data = list(self.trading_data["account_balance"])[-10:]
+                # --- FIX: Check data structure before unpacking ---
+                if all(isinstance(item, dict) and 'timestamp' in item and 'balance' in item for item in recent_balances_data):
+                    times = [item['timestamp'] for item in recent_balances_data]
+                    balances = [item['balance'] for item in recent_balances_data]
+                    
+                    if len(times) >= 2 and len(balances) >=2: # Ensure we have at least two points
+                        first_balance = balances[0]
+                        last_balance = balances[-1]
+                        
+                        # Calculate percentage change (check for zero)
+                        if first_balance != 0:
+                            pct_change = ((last_balance - first_balance) / first_balance) * 100
+                        else:
+                            pct_change = 0 # Avoid division by zero
+                        
+                        # Flag significant drops (more than 10% drop)
+                        if pct_change < -10:
+                            anomaly = {
+                                "type": "balance_drop",
+                                "change_percent": pct_change,
+                                # Ensure times are datetime objects for subtraction
+                                "period_hours": round((times[-1] - times[0]).total_seconds() / 3600, 2) if isinstance(times[-1], datetime) and isinstance(times[0], datetime) else 'N/A',
+                                "timestamp": datetime.now().isoformat(),
+                                "message": f"Significant balance drop: {pct_change:.2f}%"
+                            }
+                            anomalies.append(anomaly)
+                else:
+                    logger.warning("Unexpected data structure in account_balance deque, cannot check for balance drop anomaly.")
+                # --- END FIX ---
             
             # Check for unusual win/loss streaks
             if len(completed_trades) > 5:
@@ -1122,7 +1174,11 @@ class MonitoringDashboard:
             return anomalies
             
         except Exception as e:
-            logger.error(f"Error detecting trading anomalies: {str(e)}")
+            # FIX: Add specific handling for unpack error if it persists
+            if isinstance(e, ValueError) and "unpack" in str(e):
+                 logger.error(f"Error detecting trading anomalies (unpack error): {str(e)}. Data structure might be incorrect.")
+            else:
+                 logger.error(f"Error detecting trading anomalies: {str(e)}")
             return []
 
     #--------------------------------------------------
@@ -1167,7 +1223,13 @@ class MonitoringDashboard:
                     # Calculate percentage change from previous period
                     if len(self.market_data["price_history"][instrument]) > 1:
                         prev_timestamp, prev_price = self.market_data["price_history"][instrument][-2]
-                        pct_change = ((current_price - prev_price) / prev_price) * 100
+                        # --- FIX: Add check for previous price being zero ---
+                        if prev_price == 0:
+                            logger.warning(f"Previous price for {instrument} is zero, cannot calculate percentage change.")
+                            pct_change = 0
+                        else:
+                            pct_change = ((current_price - prev_price) / prev_price) * 100
+                        # --- END FIX ---
                         
                         # Calculate changes over multiple timeframes
                         changes = {
@@ -1300,15 +1362,31 @@ class MonitoringDashboard:
                         to_time=end_time
                     )
                     
-                    # Need at least 10 data points for meaningful volatility calculation
-                    if hourly_data.empty or len(hourly_data) < 10:
-                        logger.warning(f"Not enough historical data for {instrument} volatility calculation")
+                    # --- FIX: Add check for 'returns' column and enough data ---
+                    if hourly_data.empty or 'returns' not in hourly_data.columns or len(hourly_data) < 10:
+                        logger.warning(f"Not enough data or missing 'returns' column for {instrument} volatility calculation")
                         continue
+                    # --- END FIX ---
+                    
+                    # --- FIX: Ensure hourly_data is a DataFrame before accessing columns/methods ---
+                    if not isinstance(hourly_data, pd.DataFrame) or hourly_data.empty:
+                        logger.warning(f"Historical data for {instrument} is not a valid DataFrame or is empty.")
+                        continue 
+                    # --- END FIX ---
                     
                     # Calculate recent price volatility (standard deviation of returns)
                     returns = hourly_data['returns'].dropna()
+                    # --- FIX: Check if returns is empty after dropna ---
+                    if returns.empty or len(returns) < 2: # Need at least 2 returns for std
+                        logger.warning(f"Not enough valid returns data for {instrument} volatility calculation")
+                        continue
+                    # --- END FIX ---
                     
-                    # Calculate standard deviation of recent returns
+                    # --- FIX: Check return type before std() ---
+                    if not isinstance(returns, pd.Series):
+                        logger.warning(f"Returns data for {instrument} is not a Pandas Series, cannot calculate std dev.")
+                        continue
+                    # --- END FIX ---
                     recent_std = returns.std()
                     
                     # Annualize volatility (assuming hourly data - multiply by sqrt of hours in a year)
@@ -1425,6 +1503,12 @@ class MonitoringDashboard:
                     # Get order book data which contains bid-ask prices
                     order_book = self.market_data_agent.get_order_book(instrument)
                     
+                    # --- FIX: Check if order_book is None ---
+                    if order_book is None:
+                        logger.warning(f"Order book data is None for {instrument}, cannot calculate spread.")
+                        continue
+                    # --- END FIX ---
+                    
                     if not order_book:
                         logger.warning(f"Could not get order book data for {instrument}")
                         continue
@@ -1472,7 +1556,13 @@ class MonitoringDashboard:
                     # Get mid price for spread percentage calculation
                     mid_price = (bid_price + ask_price) / 2
                     spread_pips = current_spread * 10000  # For 4 decimal currency pairs
-                    spread_percentage = (current_spread / mid_price) * 100
+                    # --- FIX: Ensure prices are non-zero before division ---
+                    if mid_price <= 0:
+                        logger.warning(f"Mid price is zero or negative for {instrument}, cannot calculate spread percentage.")
+                        spread_percentage = 0
+                    else:
+                        spread_percentage = (current_spread / mid_price) * 100
+                    # --- END FIX ---
                     
                     # Store current spread data point
                     timestamp = datetime.datetime.now()
@@ -2165,7 +2255,7 @@ def create_dashboard_layout(self) -> None:
         
         # Display timestamp
         st.sidebar.markdown("---")
-        st.sidebar.markdown(f"**Last Updated:** {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+        st.sidebar.markdown(f"**Last Updated:** {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
         
         # Add system control buttons
         st.sidebar.markdown("---")
@@ -2307,8 +2397,9 @@ def create_overview_panel(self) -> None:
         
         # Create sample data if real data is not available yet
         if not self.trading_data["account_balance"]:
-            dates = pd.date_range(start=datetime.now() - timedelta(hours=24), 
-                                  end=datetime.now(), freq='H')
+            # FIX: Use timedelta directly (imported above)
+            dates = pd.date_range(start=datetime.datetime.now() - timedelta(hours=24), 
+                                  end=datetime.datetime.now(), freq='H')
             balance_values = [10000 + 500 * np.sin(i/5) for i in range(len(dates))]
             balance_df = pd.DataFrame({
                 'time': dates,
@@ -2491,7 +2582,8 @@ def create_system_status_panel(self) -> None:
                 self.system_data["system_resources"]["disk"]):
                 
                 # Extract data for the last hour
-                last_hour = datetime.now() - timedelta(hours=1)
+                # FIX: Use timedelta directly (imported above)
+                last_hour = datetime.datetime.now() - timedelta(hours=1)
                 
                 cpu_data = [(t, v) for t, v in self.system_data["system_resources"]["cpu"] 
                           if t > last_hour]

@@ -73,6 +73,13 @@ class MarketDataAgent(BaseAgent):
             config_manager = ConfigManager()
             self.config = config_manager.as_dict()
         
+        # --- ADDED: Determine operation mode --- 
+        paper_trading_env = os.getenv('PAPER_TRADING_MODE', 'false').lower() == 'true'
+        # Check config, default paper_trading_mode to False (live) if not present
+        paper_trading_config = self.config.get("system", {}).get("paper_trading_mode", False)
+        self.use_mock_data = paper_trading_env or paper_trading_config
+        # --- END ADDED ---
+        
         # OANDA API configuration
         self.oanda_config = self.config.get('api_credentials', {}).get('oanda', {})
         self.api_key = self.oanda_config.get('api_key')
@@ -106,7 +113,11 @@ class MarketDataAgent(BaseAgent):
         # Initialize data directories
         self._ensure_data_dirs_exist()
         
-        self.log_action("init", f"Market Data Agent initialized. Practice mode: {self.is_practice}")
+        # Added for the new last_update_time attribute
+        self.last_update_time: Optional[datetime] = None
+        
+        # Log the determined mode
+        self.log_action("init", f"Market Data Agent initialized. Use Mock Data: {self.use_mock_data}")
     
     def _ensure_data_dirs_exist(self) -> None:
         """Create data directories if they don't exist."""
@@ -126,35 +137,78 @@ class MarketDataAgent(BaseAgent):
         """
         self.log_action("initialize", "Initializing Market Data Agent")
         
-        try:
-            # Validate required configuration
-            if not all([self.api_key, self.account_id, self.api_url]):
-                self.log_action("initialize", "Missing OANDA API credentials")
-                self.handle_error(ValueError("Missing required OANDA API credentials"))
-                return False
-            
-            # Initialize OANDA API client
-            self.api_client = API(access_token=self.api_key, environment=self.api_url)
-            
-            # Test connection by fetching account details
-            self._test_api_connection()
-            
-            # Fetch available instruments
-            self._fetch_available_instruments()
-            
-            # Update status
-            self.status = "ready"
-            self.state["status"] = "ready"
-            
-            self.log_action("initialize", "Market Data Agent initialized successfully")
+        if self.use_mock_data:
+            self.log_action("initialize", "Setting up mock data for paper trading")
+            # Initialize mock data structure
+            self.mock_data = self._generate_initial_mock_data()
+            self.status = "ready" # Ready with mock data
+            self.last_update_time = datetime.now()
+            self.log_action("initialize", "Market Data Agent initialized in MOCK mode")
             return True
+        else:
+            # --- FIX: Require OANDA credentials for live mode --- 
+            self.account_id = os.getenv("OANDA_ACCOUNT_ID") or self.config.get('api_credentials', {}).get('oanda', {}).get('account_id')
+            self.access_token = os.getenv("OANDA_API_KEY") or self.config.get('api_credentials', {}).get('oanda', {}).get('api_key')
+            self.environment = "live" if (os.getenv("OANDA_ENVIRONMENT", "practice").lower() == "live") else "practice"
+            api_url_config = self.config.get('api_credentials', {}).get('oanda', {}).get('api_url')
+            self.api_url = os.getenv("OANDA_API_URL", api_url_config if api_url_config else (
+                "https://api-fxtrade.oanda.com" if self.environment == "live" else "https://api-fxpractice.oanda.com"
+            ))
+
+            if not self.account_id or not self.access_token:
+                self.log_action("initialize", "CRITICAL: OANDA credentials (Account ID or API Key) missing for LIVE mode. Cannot initialize.")
+                self.status = "error"
+                return False # Fail initialization if credentials missing in live mode
+                
+            self.headers = {
+                "Authorization": f"Bearer {self.access_token}",
+                "Content-Type": "application/json"
+            }
             
-        except Exception as e:
-            self.handle_error(e)
-            self.status = "error"
-            self.state["status"] = "error"
-            return False
+            # Test connection
+            if self._test_oanda_connection():
+                self.status = "ready"
+                self.last_update_time = datetime.now()
+                self.log_action("initialize", f"Market Data Agent initialized in LIVE mode ({self.environment})")
+                # Optionally start streaming if configured
+                # if self.config.get("streaming_enabled", False):
+                #     self.start_streaming()
+                return True
+            else:
+                self.log_action("initialize", "Failed to connect to OANDA API for LIVE mode.")
+                self.status = "error"
+                return False
+            # --- END FIX ---
     
+    def _setup_mock_data(self) -> None:
+        """
+        Set up mock data for paper trading mode when API credentials are missing.
+        """
+        self.log_action("setup_mock", "Setting up mock data for paper trading")
+        
+        # Define common forex pairs as available instruments
+        self._available_instruments = {
+            "EUR_USD", "USD_JPY", "GBP_USD", "USD_CHF", 
+            "AUD_USD", "USD_CAD", "NZD_USD", "EUR_GBP"
+        }
+        
+        # Create a dictionary to store mock price data
+        self._mock_prices = {
+            "EUR_USD": {"bid": 1.1852, "ask": 1.1854},
+            "USD_JPY": {"bid": 109.75, "ask": 109.78},
+            "GBP_USD": {"bid": 1.3862, "ask": 1.3865},
+            "USD_CHF": {"bid": 0.9142, "ask": 0.9145},
+            "AUD_USD": {"bid": 0.7352, "ask": 0.7355},
+            "USD_CAD": {"bid": 1.2512, "ask": 1.2515},
+            "NZD_USD": {"bid": 0.7002, "ask": 0.7005},
+            "EUR_GBP": {"bid": 0.8551, "ask": 0.8554}
+        }
+        
+        # Store a timestamp for last update
+        self._mock_last_update = datetime.now()
+        
+        self.log_action("setup_mock", f"Mock data set up with {len(self._available_instruments)} instruments")
+            
     def _test_api_connection(self) -> bool:
         """
         Test connection to the OANDA API.
@@ -165,6 +219,7 @@ class MarketDataAgent(BaseAgent):
         try:
             # Request account details to verify connection
             r = accounts.AccountSummary(accountID=self.account_id)
+            self.api_client = API(access_token=self.access_token, environment=self.api_url)
             self.api_client.request(r)
             
             return True
@@ -248,6 +303,10 @@ class MarketDataAgent(BaseAgent):
         if not self._validate_instrument(instrument):
             raise ValueError(f"Invalid instrument: {instrument}")
         
+        # Use mock data if in mock mode
+        if self.status == "ready_mock":
+            return self._get_mock_price(instrument)
+            
         try:
             # Define the request
             params = {"instruments": instrument}
@@ -272,6 +331,9 @@ class MarketDataAgent(BaseAgent):
                 if result['bid'] is not None and result['ask'] is not None:
                     result['spread'] = result['ask'] - result['bid']
                 
+                # Update last_update_time
+                self.last_update_time = datetime.now()
+                
                 return result
             else:
                 raise ValueError(f"No price data received for {instrument}")
@@ -279,6 +341,56 @@ class MarketDataAgent(BaseAgent):
         except V20Error as e:
             self.handle_error(e)
             raise ConnectionError(f"Failed to fetch current price: {str(e)}")
+    
+    def _get_mock_price(self, instrument: str) -> Dict[str, Any]:
+        """
+        Get a mock price for paper trading mode.
+        
+        Args:
+            instrument: The currency pair (e.g., "EUR_USD")
+            
+        Returns:
+            Dict containing simulated price information
+        """
+        # Check if we have this instrument in our mock data
+        if instrument not in self._mock_prices:
+            # Create some realistic mock data for this pair
+            base_price = 1.0
+            if "JPY" in instrument:
+                base_price = 100.0
+            
+            self._mock_prices[instrument] = {
+                "bid": base_price * 0.9995,
+                "ask": base_price * 1.0005
+            }
+            
+        # Get the base mock price
+        mock_price = self._mock_prices[instrument]
+        
+        # Add some random movement to simulate market changes (±0.1%)
+        import random
+        movement = random.uniform(-0.001, 0.001)
+        mock_price["bid"] *= (1 + movement)
+        mock_price["ask"] *= (1 + movement)
+        
+        # Store the updated prices
+        self._mock_prices[instrument] = mock_price
+        
+        # Create the result dictionary
+        result = {
+            'instrument': instrument,
+            'time': datetime.now().isoformat(),
+            'bid': mock_price["bid"],
+            'ask': mock_price["ask"],
+            'spread': mock_price["ask"] - mock_price["bid"],
+            'status': 'tradeable',
+            'is_mock': True
+        }
+        
+        # Update last_update_time
+        self.last_update_time = datetime.now()
+        
+        return result
     
     def get_historical_data(
         self, 
@@ -316,80 +428,202 @@ class MarketDataAgent(BaseAgent):
         if not self._validate_timeframe(timeframe):
             raise ValueError(f"Invalid timeframe: {timeframe}")
         
+        # Use mock data if in mock mode
+        if self.status == "ready_mock":
+            return self._get_mock_historical_data(instrument, timeframe, count, from_time, to_time)
+            
         # Limit count to 5000 (OANDA API limit)
-        count = min(count, 5000)
-        
+        if count > 5000:
+            self.log_action("get_historical_data", "Limiting count to 5000 (OANDA API limit)")
+            count = 5000
+            
         try:
-            # Prepare parameters
+            # Set up params based on inputs
             params = {
                 "granularity": timeframe,
-                "price": "M"  # Midpoint candles
+                "price": "M"  # Midpoint (average of bid and ask)
             }
             
-            # Add time parameters if provided
+            # Add count or time parameters
             if from_time and to_time:
                 params["from"] = from_time.strftime("%Y-%m-%dT%H:%M:%S.000000Z")
                 params["to"] = to_time.strftime("%Y-%m-%dT%H:%M:%S.000000Z")
             else:
                 params["count"] = count
             
-            # Create request
+            # Execute the request
             request = instruments.InstrumentsCandles(instrument=instrument, params=params)
-            
-            # Execute the request with retry
             response = self._with_retry(self.api_client.request, request)
             
-            # Process the response
-            if 'candles' in response:
-                candles = response['candles']
+            # Process the response into a DataFrame
+            if 'candles' in response and response['candles']:
+                data = []
+                for candle in response['candles']:
+                    if candle['complete']:  # Only use complete candles
+                        mid = candle['mid']
+                        row = {
+                            'time': pd.to_datetime(candle['time']),
+                            'open': float(mid['o']),
+                            'high': float(mid['h']),
+                            'low': float(mid['l']),
+                            'close': float(mid['c']),
+                            'volume': int(candle['volume'])
+                        }
+                        data.append(row)
                 
-                # Extract data into lists
-                times = []
-                opens = []
-                highs = []
-                lows = []
-                closes = []
-                volumes = []
-                complete = []
-                
-                for candle in candles:
-                    times.append(candle['time'])
-                    opens.append(float(candle['mid']['o']))
-                    highs.append(float(candle['mid']['h']))
-                    lows.append(float(candle['mid']['l']))
-                    closes.append(float(candle['mid']['c']))
-                    volumes.append(int(candle['volume']))
-                    complete.append(candle['complete'])
-                
-                # Create DataFrame
-                df = pd.DataFrame({
-                    'open': opens,
-                    'high': highs,
-                    'low': lows,
-                    'close': closes,
-                    'volume': volumes,
-                    'complete': complete
-                }, index=pd.DatetimeIndex(times, name='datetime'))
-                
-                # Calculate additional metrics
-                df['returns'] = df['close'].pct_change()
-                df['range'] = df['high'] - df['low']
-                
-                # Cache the data if caching is enabled
-                if self.cache_enabled:
-                    cache_key = f"{instrument}_{timeframe}_{count}"
-                    self._data_cache[cache_key] = {
-                        'data': df,
-                        'timestamp': datetime.now()
-                    }
-                
-                return df
+                if data:
+                    df = pd.DataFrame(data)
+                    df.set_index('time', inplace=True)
+                    df.sort_index(inplace=True)
+                    
+                    # Calculate returns
+                    if not df.empty and 'close' in df.columns and len(df) > 1:
+                        # Ensure 'close' is numeric
+                        df['close'] = pd.to_numeric(df['close'], errors='coerce')
+                        # Calculate percentage returns
+                        df['returns'] = df['close'].pct_change()
+                    else:
+                        df['returns'] = pd.Series(dtype='float64') # Add empty returns column if needed
+                    
+                    # Update last_update_time
+                    self.last_update_time = datetime.now()
+                    
+                    return df
+                else:
+                    return pd.DataFrame()
             else:
-                raise ValueError(f"No candle data received for {instrument}")
+                self.log_action("get_historical_data", f"No candle data received for {instrument}")
+                return pd.DataFrame()
                 
-        except V20Error as e:
+        except Exception as e:
             self.handle_error(e)
-            raise ConnectionError(f"Failed to fetch historical data: {str(e)}")
+            self.log_action("get_historical_data", f"Error fetching historical data: {str(e)}")
+            
+            # Return empty DataFrame instead of raising exception
+            # This allows the system to continue even if historical data fetch fails
+            return pd.DataFrame()
+            
+    def _get_mock_historical_data(
+        self, 
+        instrument: str, 
+        timeframe: str, 
+        count: int,
+        from_time: Optional[datetime] = None,
+        to_time: Optional[datetime] = None
+    ) -> pd.DataFrame:
+        """
+        Generate mock historical data for paper trading mode.
+        
+        Args:
+            instrument: The currency pair (e.g., "EUR_USD")
+            timeframe: The timeframe/granularity (e.g., "M1", "H1", "D")
+            count: Number of candles to retrieve
+            from_time: Start time for historical data (optional)
+            to_time: End time for historical data (optional)
+            
+        Returns:
+            DataFrame containing simulated historical price data
+        """
+        import numpy as np
+        
+        self.log_action("mock_data", f"Generating mock historical data for {instrument}")
+        
+        # Determine time interval from timeframe string
+        interval_map = {
+            'M1': pd.Timedelta(minutes=1),
+            'M5': pd.Timedelta(minutes=5),
+            'M15': pd.Timedelta(minutes=15),
+            'M30': pd.Timedelta(minutes=30),
+            'H1': pd.Timedelta(hours=1),
+            'H4': pd.Timedelta(hours=4),
+            'H8': pd.Timedelta(hours=8),
+            'D': pd.Timedelta(days=1),
+            'W': pd.Timedelta(weeks=1),
+            'M': pd.Timedelta(days=30)
+        }
+        
+        interval = interval_map.get(timeframe, pd.Timedelta(hours=1))
+        
+        # Set up time range
+        if to_time is None:
+            to_time = datetime.now()
+        
+        if from_time is None:
+            from_time = to_time - (interval * count)
+        
+        # Create a date range for our data
+        dates = pd.date_range(start=from_time, end=to_time, periods=count)
+        
+        # Get base price from mock prices or create one
+        if instrument in self._mock_prices:
+            base_price = (self._mock_prices[instrument]['bid'] + self._mock_prices[instrument]['ask']) / 2
+        else:
+            base_price = 1.0
+            if "JPY" in instrument:
+                base_price = 100.0
+        
+        # Generate mock price data with random walk
+        np.random.seed(hash(instrument) % 10000)  # Consistent randomness per instrument
+        
+        # Parameters for price simulation
+        volatility = 0.0015  # Daily volatility
+        if timeframe in ['M1', 'M5', 'M15', 'M30']:
+            volatility *= 0.2  # Lower volatility for shorter timeframes
+        elif timeframe in ['H1', 'H4', 'H8']:
+            volatility *= 0.5  # Medium volatility for hourly timeframes
+        
+        # Generate log returns with drift (slightly upward trend)
+        drift = 0.00005  # Small upward drift
+        returns = np.random.normal(drift, volatility, count)
+        
+        # Create price series
+        price_series = np.exp(np.cumsum(returns))
+        prices = base_price * price_series
+        
+        # Generate OHLC data with some randomness
+        data = []
+        for i, date in enumerate(dates):
+            close_price = prices[i]
+            
+            # Create realistic OHLC with some randomness
+            high_price = close_price * (1 + np.random.uniform(0, volatility * 2))
+            low_price = close_price * (1 - np.random.uniform(0, volatility * 2))
+            open_price = low_price + np.random.uniform(0, high_price - low_price)
+            
+            # Ensure OHLC relationships hold
+            high_price = max(high_price, open_price, close_price)
+            low_price = min(low_price, open_price, close_price)
+            
+            # Generate reasonable volume
+            volume = int(np.random.uniform(1000, 10000))
+            
+            data.append({
+                'time': date,
+                'open': open_price,
+                'high': high_price,
+                'low': low_price,
+                'close': close_price,
+                'volume': volume
+            })
+        
+        # Create DataFrame
+        df = pd.DataFrame(data)
+        df.set_index('time', inplace=True)
+        df.sort_index(inplace=True)
+        
+        # Calculate returns
+        if not df.empty and 'close' in df.columns and len(df) > 1:
+            # Ensure 'close' is numeric
+            df['close'] = pd.to_numeric(df['close'], errors='coerce')
+            # Calculate percentage returns
+            df['returns'] = df['close'].pct_change()
+        else:
+            df['returns'] = pd.Series(dtype='float64') # Add empty returns column if needed
+        
+        # Update last_update_time
+        self.last_update_time = datetime.now()
+        
+        return df
     
     def get_order_book(self, instrument: str) -> Dict[str, Any]:
         """
@@ -438,6 +672,9 @@ class MarketDataAgent(BaseAgent):
                         'data': result,
                         'timestamp': datetime.now()
                     }
+                
+                # Update last_update_time
+                self.last_update_time = datetime.now()
                 
                 return result
             else:
@@ -976,4 +1213,112 @@ class MarketDataAgent(BaseAgent):
                 'error': str(e),
                 'error_type': type(e).__name__,
                 'timestamp': datetime.now().isoformat()
-            } 
+            }
+
+    def _generate_mock_order_book(self, instrument: str) -> Dict[str, Any]:
+        """Generates a plausible, but empty or minimal, mock order book structure."""
+        # Return a structure that looks like OANDA's but might be empty
+        return {
+            "orderBook": {
+                "instrument": instrument,
+                "time": datetime.now().isoformat() + "Z",
+                "price": str(self.mock_data.get(instrument, {}).get('price', 1.1)), # Use mock price
+                "bucketWidth": "0.0005",
+                "buckets": [
+                    # Add a couple of dummy buckets if needed for testing downstream logic
+                    # {"price": "1.0995", "longCountPercent": "50.0", "shortCountPercent": "0.0"},
+                    # {"price": "1.1005", "longCountPercent": "0.0", "shortCountPercent": "50.0"}
+                ]
+            }
+        }
+        
+    def _generate_initial_mock_data(self) -> Dict:
+        """Generates initial base prices for mock data."""
+        base_prices = {
+            "EUR_USD": 1.1000,
+            "GBP_USD": 1.2500,
+            "USD_JPY": 140.00,
+            "AUD_USD": 0.6700,
+            "USD_CAD": 1.3500,
+            "EUR_GBP": 0.8800,
+            "NZD_USD": 0.6200,
+            "USD_CHF": 0.9000
+        }
+        mock_data = {}
+        for instrument, price in base_prices.items():
+            mock_data[instrument] = {
+                'price': price,
+                'bid': price - 0.0001, # Small spread
+                'ask': price + 0.0001,
+                'last_updated': datetime.now()
+            }
+        return mock_data
+        
+    def _test_oanda_connection(self) -> bool:
+        """
+        Test connection to the OANDA API.
+        
+        Returns:
+            bool: True if connection was successful, False otherwise
+        """
+        try:
+            # Request account details to verify connection
+            r = accounts.AccountSummary(accountID=self.account_id)
+            self.api_client = API(access_token=self.access_token, environment=self.api_url)
+            self.api_client.request(r)
+            
+            return True
+        except V20Error as e:
+            self.handle_error(e)
+            raise ConnectionError(f"Failed to connect to OANDA API: {str(e)}")
+        
+    def _fetch_oanda_order_book(self, instrument: str) -> Dict[str, Any]:
+        """
+        Fetch the order book from the OANDA API.
+        
+        Args:
+            instrument: The currency pair (e.g., "EUR_USD")
+            
+        Returns:
+            Dict containing order book data including bids and asks
+        """
+        self.log_action("get_order_book", f"Fetching order book for {instrument}")
+        
+        try:
+            # Define the request
+            params = {"bucketWidth": "0.0005"}  # Default bucket width
+            request = instruments.InstrumentsOrderBook(instrument=instrument, params=params)
+            
+            # Execute the request with retry
+            response = self._with_retry(self.api_client.request, request)
+            
+            # Process the response
+            if 'orderBook' in response:
+                order_book = response['orderBook']
+                
+                result = {
+                    'instrument': response.get('instrument'),
+                    'time': response.get('time'),
+                    'bids': order_book.get('buckets', []),
+                    'asks': order_book.get('buckets', []),
+                    'price': float(response.get('price', 0))
+                }
+                
+                # Save to cache if enabled
+                if self.cache_enabled:
+                    cache_key = f"orderbook_{instrument}"
+                    self._data_cache[cache_key] = {
+                        'data': result,
+                        'timestamp': datetime.now()
+                    }
+                
+                # Update last_update_time
+                self.last_update_time = datetime.now()
+                
+                return result
+            else:
+                raise ValueError(f"No order book data received for {instrument}")
+                
+        except V20Error as e:
+            self.handle_error(e)
+            raise ConnectionError(f"Failed to fetch order book: {str(e)}") 

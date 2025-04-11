@@ -528,31 +528,22 @@ class TechnicalAnalystAgent(BaseAgent):
     
     def initialize(self) -> bool:
         """
-        Set up the Technical Analyst Agent and its resources.
-        
-        This method implements the abstract method from BaseAgent and
-        handles any necessary setup operations.
+        Initialize the Technical Analyst Agent.
         
         Returns:
             bool: True if initialization was successful, False otherwise
         """
-        self.log_action("initialize", "Technical Analyst Agent initialization started")
+        self.log_action("initialize", "Initializing Technical Analyst Agent")
         
         try:
-            # Verify market data agent if provided
-            if self.market_data_agent is not None:
-                self.log_action("initialize", "MarketDataAgent available for data retrieval")
-            else:
-                self.log_action("initialize", "No MarketDataAgent provided, will rely on direct data input")
-            
-            # Set up any resources needed
-            plt.style.use(self.visualization_settings['style'])
+            # Check if MarketDataAgent is connected
+            if not self.market_data_agent:
+                self.log_action("initialize", "Warning: No MarketDataAgent connected")
             
             # Update status
             self.status = "ready"
             self.state["status"] = "ready"
             
-            self.log_action("initialize", "Technical Analyst Agent initialized successfully")
             return True
             
         except Exception as e:
@@ -560,6 +551,189 @@ class TechnicalAnalystAgent(BaseAgent):
             self.status = "error"
             self.state["status"] = "error"
             return False
+            
+    def run_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Execute the technical analysis task.
+        
+        This method implements the abstract method from BaseAgent and serves
+        as the primary entry point for technical analysis operations.
+        
+        Args:
+            task: Task description and parameters including:
+                - type: Type of analysis to perform (e.g., "analyze", "strategy", "backtest")
+                - symbol: The currency pair to analyze
+                - timeframe: The timeframe for analysis (e.g., "1h", "4h", "1d")
+                - indicators: Optional specific indicators to calculate
+                - strategy: Optional strategy to implement
+
+        Returns:
+            Dict[str, Any]: Task execution results including:
+                - status: "success" or "error"
+                - data: Analysis results (for "analyze" and "strategy" tasks)
+                - signals: Generated trading signals
+                - metrics: Performance metrics (for "backtest" tasks)
+                - chart_paths: Paths to generated charts (if any)
+        """
+        self.log_action("run_task", f"Running task: {task.get('type', 'Unknown')}")
+        
+        # Update state
+        self.state["tasks"].append(task)
+        self.last_active = datetime.now()
+        self.state["last_active"] = self.last_active
+        
+        try:
+            task_type = task.get("type", "analyze")
+            symbol = task.get("symbol", "EUR_USD")
+            timeframe = task.get("timeframe", "1h")
+            
+            # Get market data if needed and not provided
+            if "data" not in task and self.market_data_agent:
+                market_data = self.market_data_agent.get_historical_data(
+                    instrument=symbol, 
+                    timeframe=timeframe, 
+                    count=task.get("count", 500)
+                )
+            else:
+                market_data = task.get("data")
+                
+            if market_data is None or (isinstance(market_data, pd.DataFrame) and market_data.empty):
+                return {
+                    "status": "error",
+                    "message": f"No market data available for {symbol} ({timeframe})"
+                }
+            
+            # Execute appropriate task based on type
+            if task_type == "analyze":
+                # Perform technical analysis
+                indicators = task.get("indicators", None)
+                results = self.analyze(market_data)
+                
+                # Generate visualization if requested
+                chart_paths = []
+                if task.get("visualize", False) and self.visualization_settings["save_plots"]:
+                    # Generate charts for analysis results
+                    chart_paths = self._generate_analysis_charts(symbol, timeframe, market_data, results)
+                
+                return {
+                    "status": "success",
+                    "data": results,
+                    "signals": results.get("signals", {}),
+                    "chart_paths": chart_paths,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "strategy":
+                # Implement trading strategy
+                strategy_name = task.get("strategy", self.strategy_settings["default_strategy"])
+                params = task.get("parameters", self.strategy_settings["default_parameters"])
+                
+                strategy_results = self.implement_strategy(market_data, strategy_name, params)
+                
+                return {
+                    "status": "success",
+                    "data": strategy_results,
+                    "signals": strategy_results.get("signals", pd.Series()),
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "backtest":
+                # Backtest a strategy
+                strategy_name = task.get("strategy", self.strategy_settings["default_strategy"])
+                params = task.get("parameters", self.strategy_settings["default_parameters"])
+                
+                backtest_results = self.backtest_strategy(market_data, strategy_name, params)
+                
+                return {
+                    "status": "success",
+                    "data": backtest_results,
+                    "metrics": backtest_results.get("metrics", {}),
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "optimize":
+                # Optimize strategy parameters
+                strategy_name = task.get("strategy", self.strategy_settings["default_strategy"])
+                param_grid = task.get("param_grid", {})
+                
+                if not param_grid:
+                    return {
+                        "status": "error",
+                        "message": "Parameter grid required for optimization"
+                    }
+                
+                optimization_results = self.optimize_parameters(market_data, strategy_name, param_grid)
+                
+                return {
+                    "status": "success",
+                    "data": optimization_results,
+                    "best_parameters": optimization_results.get("best_parameters", {}),
+                    "metrics": optimization_results.get("metrics", {}),
+                    "timestamp": datetime.now().isoformat()
+                }
+            
+            else:
+                return {
+                    "status": "error",
+                    "message": f"Unknown task type: {task_type}"
+                }
+                
+        except Exception as e:
+            self.handle_error(e)
+            return {
+                "status": "error",
+                "message": str(e),
+                "timestamp": datetime.now().isoformat()
+            }
+    
+    def _generate_analysis_charts(self, symbol: str, timeframe: str, data: pd.DataFrame, 
+                             results: Dict[str, Any]) -> List[str]:
+        """
+        Generate charts for analysis results
+        
+        Args:
+            symbol: Currency pair symbol
+            timeframe: Timeframe of the data
+            data: Market data
+            results: Analysis results
+            
+        Returns:
+            List[str]: Paths to saved chart files
+        """
+        import matplotlib.pyplot as plt
+        import matplotlib.dates as mdates
+        from matplotlib.gridspec import GridSpec
+        
+        chart_paths = []
+        try:
+            # Use the visualization settings
+            plt.style.use(self.visualization_settings.get('style', 'seaborn'))
+            dpi = self.visualization_settings.get('dpi', 100)
+            figsize = self.visualization_settings.get('figsize', (12, 8))
+            
+            # Create main price chart with indicators
+            fig = plt.figure(figsize=figsize, dpi=dpi)
+            
+            # Prepare filename and path
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            filename = f"{symbol}_{timeframe}_{timestamp}.png"
+            filepath = os.path.join(self.visualization_settings['plot_dir'], filename)
+            
+            # Save the figure
+            plt.tight_layout()
+            plt.savefig(filepath)
+            plt.close(fig)
+            
+            chart_paths.append(filepath)
+            
+            # Create separate indicator charts if needed
+            # ...
+            
+            return chart_paths
+            
+        except Exception as e:
+            self.logger.error(f"Error generating charts: {str(e)}")
+            return chart_paths
     
     # Moving Average Indicators
     

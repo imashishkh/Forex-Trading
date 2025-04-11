@@ -18,6 +18,7 @@ import numpy as np
 from typing import Dict, List, Any, Optional, Tuple, Union
 from datetime import datetime, timedelta
 from pathlib import Path
+import uuid
 
 # OANDA API
 from oandapyV20 import API
@@ -153,39 +154,55 @@ class PortfolioManagerAgent(BaseAgent):
         self.performance_data.to_csv(self.performance_file, index=False)
     
     def initialize(self) -> bool:
-        """
-        Initialize the Portfolio Manager Agent and connect to the OANDA API.
-        
-        Returns:
-            bool: True if initialization was successful, False otherwise
-        """
         self.log_action("initialize", "Initializing Portfolio Manager Agent")
+        self.status = "initializing"
         
-        try:
-            # Validate required configuration
-            if not all([self.api_key, self.account_id, self.api_url]):
-                self.log_action("initialize", "Missing OANDA API credentials")
-                self.handle_error(ValueError("Missing required OANDA API credentials"))
-                return False
-            
-            # Initialize OANDA API client
-            self.api_client = API(access_token=self.api_key, environment=self.api_url)
-            
-            # Test connection by fetching account details
-            self._test_api_connection()
-            
-            # Update status
+        # Determine operation mode (live or paper/simulation)
+        paper_trading_env = os.getenv('PAPER_TRADING_MODE', 'false').lower() == 'true'
+        paper_trading_config = self.config.get("paper_trading_mode", True) # Default to paper if not specified
+        self.use_simulation = paper_trading_env or paper_trading_config
+        
+        if self.use_simulation:
+            self.log_action("initialize", "Using simulated portfolio for paper trading.")
+            self._setup_simulated_portfolio()
             self.status = "ready"
-            self.state["status"] = "ready"
-            
-            self.log_action("initialize", "Portfolio Manager Agent initialized successfully")
+            self.log_action("initialize", "Portfolio Manager Agent initialized in SIMULATION mode")
             return True
-            
-        except Exception as e:
-            self.handle_error(e)
-            self.status = "error"
-            self.state["status"] = "error"
-            return False
+        else:
+             # --- FIX: Require OANDA credentials for live mode --- 
+            self.account_id = os.getenv("OANDA_ACCOUNT_ID") or self.config.get('api_credentials', {}).get('oanda', {}).get('account_id')
+            self.api_key = os.getenv("OANDA_API_KEY") or self.config.get('api_credentials', {}).get('oanda', {}).get('api_key')
+            self.environment = "live" if (os.getenv("OANDA_ENVIRONMENT", "practice").lower() == "live") else "practice"
+            api_url_config = self.config.get('api_credentials', {}).get('oanda', {}).get('api_url')
+            self.api_url = os.getenv("OANDA_API_URL", api_url_config if api_url_config else (
+                "https://api-fxtrade.oanda.com" if self.environment == "live" else "https://api-fxpractice.oanda.com"
+            ))
+
+            if not self.account_id or not self.api_key:
+                self.log_action("initialize", "CRITICAL: OANDA credentials (Account ID or API Key) missing for LIVE mode. Cannot initialize Portfolio Manager.")
+                self.status = "error"
+                return False # Fail initialization
+
+            try:
+                self.api_client = API(access_token=self.api_key, environment=self.api_url)
+                self.log_action("initialize", f"OANDA API client initialized for {self.environment} environment.")
+                
+                # Test connection
+                if self._test_api_connection():
+                    self.status = "ready"
+                    self.log_action("initialize", "Portfolio Manager Agent initialized in LIVE mode")
+                    # Load portfolio state from OANDA
+                    # self.portfolio = self.get_account_summary() # Example: Load real data
+                    return True
+                else:
+                     self.log_action("initialize", "Failed to connect to OANDA API for LIVE mode.")
+                     self.status = "error"
+                     return False
+            except Exception as e:
+                self.handle_error(e)
+                self.status = "error"
+                return False
+            # --- END FIX ---
     
     def _test_api_connection(self) -> bool:
         """
@@ -2653,3 +2670,193 @@ class PortfolioManagerAgent(BaseAgent):
                 'error': 'Failed to add units to position',
                 'details': result
             }
+
+    def run_task(self, task: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Execute portfolio management tasks such as trade execution, portfolio balancing, 
+        position management, and performance tracking.
+        
+        This method implements the abstract method from BaseAgent and serves
+        as the primary entry point for portfolio management operations.
+        
+        Args:
+            task: Task description and parameters including:
+                - type: Type of task (e.g., "execute_trade", "adjust_position", "portfolio_status")
+                - trade: Trade details for execution (for "execute_trade" type)
+                - position_id: Position ID for position adjustments (for "adjust_position" type)
+                - adjustment: Adjustment details (for "adjust_position" type)
+
+        Returns:
+            Dict[str, Any]: Task execution results
+        """
+        self.log_action("run_task", f"Running task: {task.get('type', 'Unknown')}")
+        
+        # Update state
+        self.state["tasks"].append(task)
+        self.last_active = datetime.now()
+        self.state["last_active"] = self.last_active
+        
+        try:
+            task_type = task.get("type", "portfolio_status")
+            
+            if task_type == "execute_trade":
+                # Execute a trade
+                trade_details = task.get("trade", {})
+                if not trade_details:
+                    return {
+                        "status": "error",
+                        "message": "No trade details provided"
+                    }
+                
+                execution_result = self.execute_trade(trade_details)
+                
+                return {
+                    "status": "success" if execution_result.get("executed", False) else "error",
+                    "result": execution_result,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "adjust_position":
+                # Adjust an existing position
+                position_id = task.get("position_id")
+                adjustment = task.get("adjustment", {})
+                
+                if not position_id or not adjustment:
+                    return {
+                        "status": "error",
+                        "message": "Position ID and adjustment details required"
+                    }
+                
+                adjustment_result = self.adjust_position(position_id, adjustment)
+                
+                return {
+                    "status": "success" if adjustment_result.get("adjusted", False) else "error",
+                    "result": adjustment_result,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "close_position":
+                # Close a position
+                position_id = task.get("position_id")
+                
+                if not position_id:
+                    return {
+                        "status": "error",
+                        "message": "Position ID required"
+                    }
+                
+                close_result = self.close_position(position_id)
+                
+                return {
+                    "status": "success" if close_result.get("closed", False) else "error",
+                    "result": close_result,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "portfolio_status":
+                # Get portfolio status
+                status = self._get_portfolio_summary()
+                
+                return {
+                    "status": "success",
+                    "portfolio": status,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            elif task_type == "portfolio_performance":
+                # Calculate portfolio performance
+                period = task.get("period", "all")
+                metrics = self.calculate_performance_metrics(period)
+                
+                return {
+                    "status": "success",
+                    "performance": metrics,
+                    "timestamp": datetime.now().isoformat()
+                }
+                
+            else:
+                return {
+                    "status": "error",
+                    "message": f"Unknown task type: {task_type}"
+                }
+                
+        except Exception as e:
+            self.handle_error(e)
+            return {
+                "status": "error",
+                "message": str(e),
+                "timestamp": datetime.now().isoformat()
+            }
+
+    def _setup_simulated_portfolio(self) -> None:
+        """
+        Set up a simulated portfolio for paper trading mode when API credentials are missing.
+        """
+        self.log_action("setup_sim", "Setting up simulated portfolio for paper trading")
+        
+        # Set default values for trading parameters
+        # Get values from config or use defaults
+        trading_config = self.config.get('trading', {})
+        self.leverage = trading_config.get('leverage', 30)  # Default leverage is 30:1
+        self.max_positions = trading_config.get('max_open_trades', 5)  # Max open positions
+        self.risk_per_trade = trading_config.get('risk_per_trade', 2.0)  # Default 2% risk per trade
+        
+        # Initialize simulated portfolio with starting values
+        initial_balance = trading_config.get('initial_balance', 10000.00)  # Starting with $10,000 by default
+        
+        # Create portfolio directory if it doesn't exist
+        os.makedirs(self.portfolio_data_dir, exist_ok=True)
+        
+        # Define simulated portfolio file paths
+        self.portfolio_file = os.path.join(self.portfolio_data_dir, 'simulated_portfolio.json')
+        self.trades_file = os.path.join(self.portfolio_data_dir, 'trade_history.csv')
+        self.performance_file = os.path.join(self.portfolio_data_dir, 'performance.csv')
+        
+        # Reset portfolio to initial state
+        self.portfolio = {
+            'account_id': f"sim-{uuid.uuid4().hex[:8]}",
+            'account_balance': initial_balance,
+            'equity': initial_balance,
+            'used_margin': 0.0,
+            'free_margin': initial_balance,
+            'margin_level': 100.0,  # Percentage
+            'leverage': self.leverage,
+            'max_positions': self.max_positions,
+            'risk_per_trade': self.risk_per_trade,
+            'open_positions': [],
+            'pending_orders': [],
+            'closed_positions': [],
+            'account_history': [{
+                'timestamp': datetime.now().isoformat(),
+                'balance': initial_balance,
+                'equity': initial_balance,
+                'used_margin': 0.0,
+                'free_margin': initial_balance
+            }]
+        }
+        
+        # Save the initial portfolio state
+        with open(self.portfolio_file, 'w') as f:
+            json.dump(self.portfolio, f, indent=4, default=str)
+        
+        # Initialize or load trade history
+        if not os.path.exists(self.trades_file):
+            self._create_new_trade_history()
+        else:
+            try:
+                self.trade_history = pd.read_csv(self.trades_file)
+            except Exception as e:
+                self.logger.warning(f"Error loading trade history: {str(e)}. Creating new file.")
+                self._create_new_trade_history()
+        
+        # Initialize or load performance data
+        if not os.path.exists(self.performance_file):
+            self._create_new_performance_data()
+        else:
+            try:
+                self.performance_data = pd.read_csv(self.performance_file)
+            except Exception as e:
+                self.logger.warning(f"Error loading performance data: {str(e)}. Creating new file.")
+                self._create_new_performance_data()
+        
+        self.log_action("setup_sim", f"Simulated portfolio set up with initial balance of ${initial_balance:.2f}, leverage {self.leverage}:1")
