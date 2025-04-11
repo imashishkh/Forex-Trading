@@ -24,7 +24,7 @@ The Forex Trading Platform is a sophisticated trading system that integrates mul
 
 ```bash
 # Clone the repository
-git clone https://github.com/username/forex-trading.git
+git clone https://github.com/imashishkh/forex-trading.git
 cd forex-trading
 
 # Install dependencies
