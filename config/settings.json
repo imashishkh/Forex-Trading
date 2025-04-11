@@ -1,7 +1,7 @@
 {
   "api_credentials": {
     "openai": {
-      "api_key": "",
+      "api_key": "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",
       "model": "gpt-3.5-turbo"
     },
     "oanda": {

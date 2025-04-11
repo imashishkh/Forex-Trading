@@ -14,6 +14,7 @@ else
 fi
 # --- END ADDED ---
 
+export OPENAI_API_KEY="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"
 source venv/bin/activate 2>/dev/null || true  # Activate virtual environment if it exists
 
 # Create necessary directories

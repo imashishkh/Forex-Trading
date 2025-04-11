@@ -73,13 +73,6 @@ class MarketDataAgent(BaseAgent):
             config_manager = ConfigManager()
             self.config = config_manager.as_dict()
         
-        # --- ADDED: Determine operation mode --- 
-        paper_trading_env = os.getenv('PAPER_TRADING_MODE', 'false').lower() == 'true'
-        # Check config, default paper_trading_mode to False (live) if not present
-        paper_trading_config = self.config.get("system", {}).get("paper_trading_mode", False)
-        self.use_mock_data = paper_trading_env or paper_trading_config
-        # --- END ADDED ---
-        
         # OANDA API configuration
         self.oanda_config = self.config.get('api_credentials', {}).get('oanda', {})
         self.api_key = self.oanda_config.get('api_key')
@@ -116,8 +109,7 @@ class MarketDataAgent(BaseAgent):
         # Added for the new last_update_time attribute
         self.last_update_time: Optional[datetime] = None
         
-        # Log the determined mode
-        self.log_action("init", f"Market Data Agent initialized. Use Mock Data: {self.use_mock_data}")
+        self.log_action("init", f"Market Data Agent initialized. Practice mode: {self.is_practice}")
     
     def _ensure_data_dirs_exist(self) -> None:
         """Create data directories if they don't exist."""
